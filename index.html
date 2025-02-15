@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرم ذخیره در Local Storage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            direction: rtl;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>فرم ذخیره اطلاعات</h2>
+        <input type="text" id="name" placeholder="نام خود را وارد کنید">
+        <input type="email" id="email" placeholder="ایمیل خود را وارد کنید">
+        <button onclick="saveData()">ذخیره اطلاعات</button>
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        function saveData() {
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+
+            if (name && email) {
+                let userData = { name: name, email: email };
+                localStorage.setItem("userInfo", JSON.stringify(userData));
+                showData();
+            } else {
+                alert("لطفاً تمام فیلدها را پر کنید.");
+            }
+        }
+
+        function showData() {
+            let data = localStorage.getItem("userInfo");
+            if (data) {
+                let user = JSON.parse(data);
+                document.getElementById("output").innerHTML = `<p><strong>نام:</strong> ${user.name}</p><p><strong>ایمیل:</strong> ${user.email}</p>`;
+            }
+        }
+
+        // نمایش اطلاعات ذخیره شده در هنگام بارگذاری صفحه
+        window.onload = showData;
+    </script>
+</body>
+</html>
