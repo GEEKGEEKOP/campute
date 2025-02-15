@@ -48,7 +48,7 @@
             if (!isNaN(amount) && amount > 0) {
                 const date = new Date().toLocaleString('fa-IR');
                 businesses[index].cash += type === 'profit' ? amount : -amount;
-                businesses[index].transactions.push({ type, amount, date });
+                businesses[index].transactions.push({ type, amount, date, balance: businesses[index].cash });
                 saveData();
                 renderBusinesses();
             }
@@ -67,7 +67,7 @@
                     <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
                     <h4>تراکنش‌ها:</h4>
                     <div>
-                        ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${t.amount} تومان</div>`).join('')}
+                        ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${t.amount} تومان | موجودی: ${t.balance} تومان</div>`).join('')}
                     </div>
                     <canvas id="chart-${index}"></canvas>
                 `;
@@ -81,14 +81,14 @@
             if (!transactions.length) return;
             transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
             const labels = transactions.map(t => t.date);
-            const data = transactions.map(t => t.type === 'profit' ? t.amount : -t.amount);
+            const data = transactions.map(t => t.balance);
 
             new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: `نمودار تراکنش‌های ${businesses[index].name}`,
+                        label: `موجودی ${businesses[index].name} بر اساس تراکنش‌ها`,
                         data: data,
                         borderColor: 'blue',
                         fill: false
