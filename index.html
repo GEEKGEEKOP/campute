@@ -13,6 +13,8 @@
         button { margin-top: 5px; padding: 5px 10px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 3px; }
         button:hover { background: #0056b3; }
         canvas { margin-top: 20px; width: 100%; height: 200px; cursor: pointer; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+        .delete-btn:hover { background: #c82333; }
     </style>
 </head>
 <body>
@@ -51,8 +53,15 @@
                 businesses[index].transactions.push({ type, amount, date, balance: businesses[index].cash });
                 saveData();
                 renderBusinesses();
-                // پس از لود صفحه اسکرول به بخش نمودار
                 scrollToBusiness(index);
+            }
+        }
+
+        function deleteBusiness(index) {
+            if (confirm("آیا مطمئن هستید که می‌خواهید این کسب‌وکار را حذف کنید؟")) {
+                businesses.splice(index, 1);
+                saveData();
+                renderBusinesses();
             }
         }
 
@@ -67,6 +76,7 @@
                     <p>موجودی: ${business.cash} تومان</p>
                     <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
                     <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
+                    <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
                     <div>
                         ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${t.amount} تومان | موجودی: ${t.balance} تومان</div>`).join('')}
