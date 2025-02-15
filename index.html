@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نرم‌افزار حسابداری</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; direction: rtl; text-align: right; }
-        .container { width: 90%; max-width: 600px; margin: auto; }
-        .business { border: 1px solid #ddd; padding: 10px; margin-top: 10px; }
-        .log { background: #f9f9f9; padding: 5px; margin-top: 5px; border-radius: 5px; }
-        button { margin-top: 5px; }
+        body { font-family: Arial, sans-serif; direction: rtl; text-align: right; background: #f4f4f4; }
+        .container { width: 90%; max-width: 600px; margin: auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .business { border: 1px solid #ddd; padding: 10px; margin-top: 10px; background: #fff; border-radius: 5px; }
+        .log { background: #f9f9f9; padding: 5px; margin-top: 5px; border-radius: 5px; font-size: 14px; }
+        button { margin-top: 5px; padding: 5px 10px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 3px; }
+        button:hover { background: #0056b3; }
+        canvas { margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -19,6 +22,7 @@
         <input type="number" id="initialCash" placeholder="بازآورده اولیه">
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
+        <canvas id="transactionsChart"></canvas>
     </div>
     
     <script>
@@ -68,6 +72,36 @@
                     </div>
                 `;
                 list.appendChild(div);
+            });
+            renderChart();
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('transactionsChart').getContext('2d');
+            const transactions = businesses.flatMap(b => b.transactions.map(t => ({ date: t.date, amount: t.amount, type: t.type })));
+            transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const labels = transactions.map(t => t.date);
+            const data = transactions.map(t => t.type === 'profit' ? t.amount : -t.amount);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'نمودار تراکنش‌ها',
+                        data: data,
+                        borderColor: 'blue',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { title: { display: true, text: 'تاریخ' } },
+                        y: { title: { display: true, text: 'مقدار (تومان)' } }
+                    }
+                }
             });
         }
 
