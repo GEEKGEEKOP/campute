@@ -12,7 +12,7 @@
         .log { background: #f9f9f9; padding: 5px; margin-top: 5px; border-radius: 5px; font-size: 14px; }
         button { margin-top: 5px; padding: 5px 10px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 3px; }
         button:hover { background: #0056b3; }
-        canvas { margin-top: 20px; }
+        canvas { margin-top: 20px; width: 100%; height: 200px; }
     </style>
 </head>
 <body>
@@ -22,7 +22,6 @@
         <input type="number" id="initialCash" placeholder="بازآورده اولیه">
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
-        <canvas id="transactionsChart"></canvas>
     </div>
     
     <script>
@@ -70,17 +69,17 @@
                     <div>
                         ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${t.amount} تومان</div>`).join('')}
                     </div>
+                    <canvas id="chart-${index}"></canvas>
                 `;
                 list.appendChild(div);
+                renderChart(index, business.transactions);
             });
-            renderChart();
         }
 
-        function renderChart() {
-            const ctx = document.getElementById('transactionsChart').getContext('2d');
-            const transactions = businesses.flatMap(b => b.transactions.map(t => ({ date: t.date, amount: t.amount, type: t.type })));
+        function renderChart(index, transactions) {
+            const ctx = document.getElementById(`chart-${index}`).getContext('2d');
+            if (!transactions.length) return;
             transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
             const labels = transactions.map(t => t.date);
             const data = transactions.map(t => t.type === 'profit' ? t.amount : -t.amount);
 
@@ -89,7 +88,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'نمودار تراکنش‌ها',
+                        label: `نمودار تراکنش‌های ${businesses[index].name}`,
                         data: data,
                         borderColor: 'blue',
                         fill: false
