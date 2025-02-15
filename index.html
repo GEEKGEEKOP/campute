@@ -55,9 +55,10 @@
         function addTransaction(index, type) {
             const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
             if (!isNaN(amount) && amount > 0) {
+                const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
                 const date = new Date().toLocaleString('fa-IR');
                 businesses[index].cash += type === 'profit' ? amount : -amount;
-                businesses[index].transactions.push({ type, amount, date, balance: businesses[index].cash });
+                businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
                 saveData();
                 renderBusinesses();
                 scrollToBusiness(index);
@@ -90,7 +91,13 @@
                     <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
                     <div>
-                        ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان | موجودی: ${formatNumber(t.balance)} تومان</div>`).join('')}
+                        ${business.transactions.map(t => `
+                            <div class='log'>
+                                ${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
+                                | موجودی: ${formatNumber(t.balance)} تومان 
+                                | در ازای: ${t.description}
+                            </div>
+                        `).join('')}
                     </div>
                     <canvas id="chart-${index}"></canvas>
                 `;
