@@ -13,8 +13,6 @@
         button { margin-top: 5px; padding: 5px 10px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 3px; }
         button:hover { background: #0056b3; }
         canvas { margin-top: 20px; width: 100%; height: 200px; cursor: pointer; }
-        .fullscreen { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; }
-        .fullscreen canvas { width: 90%; height: 90%; }
     </style>
 </head>
 <body>
@@ -28,7 +26,6 @@
     
     <script>
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
-        let fullscreenChart = null;
 
         function saveData() {
             localStorage.setItem('businesses', JSON.stringify(businesses));
@@ -54,6 +51,8 @@
                 businesses[index].transactions.push({ type, amount, date, balance: businesses[index].cash });
                 saveData();
                 renderBusinesses();
+                // پس از لود صفحه اسکرول به بخش نمودار
+                scrollToBusiness(index);
             }
         }
 
@@ -72,7 +71,7 @@
                     <div>
                         ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${t.amount} تومان | موجودی: ${t.balance} تومان</div>`).join('')}
                     </div>
-                    <canvas id="chart-${index}" onclick="toggleFullscreen(event, ${index})"></canvas>
+                    <canvas id="chart-${index}"></canvas>
                 `;
                 list.appendChild(div);
                 renderChart(index, business.transactions);
@@ -107,37 +106,9 @@
             });
         }
 
-        function toggleFullscreen(event, index) {
-            if (fullscreenChart) {
-                document.body.removeChild(fullscreenChart);
-                fullscreenChart = null;
-            } else {
-                const fullscreenDiv = document.createElement('div');
-                fullscreenDiv.classList.add('fullscreen');
-                const canvasClone = document.getElementById(`chart-${index}`).cloneNode();
-                fullscreenDiv.appendChild(canvasClone);
-                document.body.appendChild(fullscreenDiv);
-                new Chart(canvasClone.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: businesses[index].transactions.map(t => t.date),
-                        datasets: [{
-                            label: `موجودی ${businesses[index].name} بر اساس تراکنش‌ها`,
-                            data: businesses[index].transactions.map(t => t.balance),
-                            borderColor: 'blue',
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: { title: { display: true, text: 'تاریخ' } },
-                            y: { title: { display: true, text: 'مقدار (تومان)' } }
-                        }
-                    }
-                });
-                fullscreenChart = fullscreenDiv;
-            }
+        function scrollToBusiness(index) {
+            const chartElement = document.getElementById(`chart-${index}`);
+            chartElement.scrollIntoView({ behavior: 'smooth' });
         }
 
         renderBusinesses();
