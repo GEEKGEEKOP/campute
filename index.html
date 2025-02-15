@@ -3,81 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فرم ذخیره در Local Storage</title>
+    <title>نرم‌افزار حسابداری</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            direction: rtl;
-            background-color: #f5f5f5;
-        }
-        .container {
-            width: 50%;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 15px;
-            border: none;
-            background: #28a745;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #218838;
-        }
-        .output {
-            margin-top: 20px;
-            padding: 10px;
-            background: #fff;
-            border-radius: 5px;
-        }
+        body { font-family: Arial, sans-serif; direction: rtl; text-align: right; }
+        .container { width: 90%; max-width: 600px; margin: auto; }
+        .business { border: 1px solid #ddd; padding: 10px; margin-top: 10px; }
+        button { margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>فرم ذخیره اطلاعات</h2>
-        <input type="text" id="name" placeholder="نام خود را وارد کنید">
-        <input type="email" id="email" placeholder="ایمیل خود را وارد کنید">
-        <button onclick="saveData()">ذخیره اطلاعات</button>
-        <div class="output" id="output"></div>
+        <h2>مدیریت کسب‌وکارها</h2>
+        <input type="text" id="businessName" placeholder="نام کسب‌وکار">
+        <input type="number" id="initialCash" placeholder="بازآورده اولیه">
+        <button onclick="addBusiness()">افزودن کسب‌وکار</button>
+        <div id="businessList"></div>
     </div>
-
+    
     <script>
+        let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
+
         function saveData() {
-            let name = document.getElementById("name").value;
-            let email = document.getElementById("email").value;
+            localStorage.setItem('businesses', JSON.stringify(businesses));
+        }
 
-            if (name && email) {
-                let userData = { name: name, email: email };
-                localStorage.setItem("userInfo", JSON.stringify(userData));
-                showData();
-            } else {
-                alert("لطفاً تمام فیلدها را پر کنید.");
+        function addBusiness() {
+            const name = document.getElementById('businessName').value;
+            const cash = parseFloat(document.getElementById('initialCash').value);
+            if (name && !isNaN(cash)) {
+                businesses.push({ name, cash, transactions: [] });
+                saveData();
+                renderBusinesses();
+                document.getElementById('businessName').value = '';
+                document.getElementById('initialCash').value = '';
             }
         }
 
-        function showData() {
-            let data = localStorage.getItem("userInfo");
-            if (data) {
-                let user = JSON.parse(data);
-                document.getElementById("output").innerHTML = `<p><strong>نام:</strong> ${user.name}</p><p><strong>ایمیل:</strong> ${user.email}</p>`;
+        function addTransaction(index, type) {
+            const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
+            if (!isNaN(amount) && amount > 0) {
+                businesses[index].cash += type === 'profit' ? amount : -amount;
+                businesses[index].transactions.push({ type, amount });
+                saveData();
+                renderBusinesses();
             }
         }
 
-        // نمایش اطلاعات ذخیره شده در هنگام بارگذاری صفحه
-        window.onload = showData;
+        function renderBusinesses() {
+            const list = document.getElementById('businessList');
+            list.innerHTML = '';
+            businesses.forEach((business, index) => {
+                const div = document.createElement('div');
+                div.classList.add('business');
+                div.innerHTML = `
+                    <h3>${business.name}</h3>
+                    <p>موجودی: ${business.cash} تومان</p>
+                    <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
+                    <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        renderBusinesses();
     </script>
 </body>
 </html>
