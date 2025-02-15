@@ -15,13 +15,14 @@
         canvas { margin-top: 20px; width: 100%; height: 200px; cursor: pointer; }
         .delete-btn { background: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
         .delete-btn:hover { background: #c82333; }
+        .input-number { text-align: left; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>مدیریت کسب‌وکارها</h2>
         <input type="text" id="businessName" placeholder="نام کسب‌وکار">
-        <input type="number" id="initialCash" placeholder="بازآورده اولیه">
+        <input type="text" id="initialCash" class="input-number" placeholder="بازآورده اولیه" oninput="formatInput(this)">
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
     </div>
@@ -33,9 +34,15 @@
             localStorage.setItem('businesses', JSON.stringify(businesses));
         }
 
+        function formatInput(input) {
+            let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
+            input.value = value;
+        }
+
         function addBusiness() {
             const name = document.getElementById('businessName').value;
-            const cash = parseFloat(document.getElementById('initialCash').value);
+            const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, '')); // حذف ویرگول‌ها برای تبدیل به عدد
             if (name && !isNaN(cash)) {
                 businesses.push({ name, cash, transactions: [] });
                 saveData();
@@ -65,6 +72,10 @@
             }
         }
 
+        function formatNumber(number) {
+            return number.toLocaleString('fa-IR'); // فرمت فارسی برای اعداد
+        }
+
         function renderBusinesses() {
             const list = document.getElementById('businessList');
             list.innerHTML = '';
@@ -73,13 +84,13 @@
                 div.classList.add('business');
                 div.innerHTML = `
                     <h3>${business.name}</h3>
-                    <p>موجودی: ${business.cash} تومان</p>
+                    <p>موجودی: ${formatNumber(business.cash)} تومان</p>
                     <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
                     <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
                     <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
                     <div>
-                        ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${t.amount} تومان | موجودی: ${t.balance} تومان</div>`).join('')}
+                        ${business.transactions.map(t => `<div class='log'>${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان | موجودی: ${formatNumber(t.balance)} تومان</div>`).join('')}
                     </div>
                     <canvas id="chart-${index}"></canvas>
                 `;
