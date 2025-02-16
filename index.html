@@ -108,62 +108,7 @@ button:hover {
     border-radius: 5px;
     font-size: 14px;
 }
-    .modal {
-        display: none; 
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
 
-    .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border-radius: 8px;
-        width: 80%;
-        max-width: 400px;
-    }
-
-    .close-btn {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .close-btn:hover,
-    .close-btn:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    input[type="number"], input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 2px solid #ccc;
-        border-radius: 5px;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
     </style>
 </head>
 <body>
@@ -174,49 +119,9 @@ button:hover {
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
     </div>
-    <!-- پاپ‌آپ برای ورودی -->
-    <div id="transactionModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h3>افزودن سود یا ضرر</h3>
-            <label for="amount">مقدار:</label>
-            <input type="number" id="amount" placeholder="مقدار" required>
-            <label for="description">توضیحات:</label>
-            <input type="text" id="description" placeholder="توضیحات" required>
-            <button onclick="submitTransaction()">ثبت</button>
-        </div>
-    </div>
+
 
     <script>
-    let promptResolve;
-
-    function customPrompt(message) {
-        return new Promise((resolve) => {
-            document.getElementById("promptMessage").textContent = message;
-            document.getElementById("promptInput").value = "";
-            document.getElementById("customPrompt").style.display = "block";
-            promptResolve = resolve;
-        });
-    }
-
-    function submitPrompt() {
-        const value = document.getElementById("promptInput").value;
-        document.getElementById("customPrompt").style.display = "none";
-        promptResolve(value);
-    }
-
-    function closePrompt() {
-        document.getElementById("customPrompt").style.display = "none";
-        promptResolve(null);
-    }
-
-    // بستن پاپ‌آپ وقتی بیرون از آن کلیک شد
-    window.onclick = function(event) {
-        if (event.target == document.getElementById("customPrompt")) {
-            closePrompt();
-        }
-    };
-
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
 
@@ -243,9 +148,9 @@ button:hover {
         }
 
         function addTransaction(index, type) {
-            const amount = parseFloat(customPrompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
+            const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
             if (!isNaN(amount) && amount > 0) {
-                const description = customPrompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
+                const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
                 const date = new Date().toLocaleString('fa-IR');
                 businesses[index].cash += type === 'profit' ? amount : -amount;
                 businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
