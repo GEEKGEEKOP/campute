@@ -203,15 +203,20 @@ button:hover {
             chartElement.scrollIntoView({ behavior: 'smooth' });
         }
 
-        //----------------------------------
+        //----------------------------------بی ناموس کار نمیکنه
+        // تبدیل تاریخ شمسی (مثلاً 1402/11/20) به میلادی
         function convertShamsiToMiladi(shamsiDate) {
             let parts = shamsiDate.split("/"); // فرض کنیم فرمت "1402/11/20" است
-            let year = parseInt(parts[0]);
-            let month = parseInt(parts[1]);
-            let day = parseInt(parts[2]);
-            
-            let miladiDate = new Date(year + 621, month - 1, day); // تبدیل به میلادی
-            return miladiDate;
+            let shYear = parseInt(parts[0]);
+            let shMonth = parseInt(parts[1]);
+            let shDay = parseInt(parts[2]);
+        
+            // تبدیل سال شمسی به میلادی تقریبی
+            let gy = shYear + 621;
+            let gm = shMonth;
+            let gd = shDay;
+        
+            return new Date(gy, gm - 1, gd); // خروجی به فرمت Date میلادی
         }
         
         function calculateValue(balance, transactionDate) {
@@ -221,11 +226,11 @@ button:hover {
             // محاسبه مقدار اولیه
             let result = (balance * rate) / monthsInYear;
         
-            // تبدیل تاریخ تراکنش از شمسی به میلادی
+            // تبدیل تاریخ شمسی به میلادی
             let transactionTime = convertShamsiToMiladi(transactionDate);
-            let now = new Date();
+            let now = new Date(); // تاریخ امروز میلادی
         
-            // محاسبه اختلاف سال و ماه
+            // محاسبه اختلاف ماهیانه
             let yearDiff = now.getFullYear() - transactionTime.getFullYear();
             let monthDiff = now.getMonth() - transactionTime.getMonth();
             let totalMonths = yearDiff * 12 + monthDiff;
@@ -235,13 +240,13 @@ button:hover {
                 totalMonths += 0.5;
             }
         
-            console.log("اختلاف ماهیانه:", totalMonths);
+            console.log("اختلاف ماهیانه:", totalMonths); // باید عدد صحیح باشه
             console.log("مقدار اولیه:", result);
         
             // محاسبه مقدار نهایی
             let finalValue = result * totalMonths;
             
-            return finalValue.toFixed(2); // نمایش دو رقم اعشار
+            return isNaN(finalValue) ? "خطا در محاسبه!" : finalValue.toFixed(2);
         }
         
         function showCalculatedValue(balance, transactionDate) {
