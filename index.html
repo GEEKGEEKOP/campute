@@ -188,31 +188,34 @@ button:hover {
     </div>
 
     <script>
-        function openModal() {
-            document.getElementById("transactionModal").style.display = "block";
-        }
-    
-        function closeModal() {
-            document.getElementById("transactionModal").style.display = "none";
-        }
-    
-        function submitTransaction() {
-            const amount = document.getElementById("amount").value;
-            const description = document.getElementById("description").value;
-            if (amount && description) {
-                // انجام کار با اطلاعات وارد شده
-                closeModal();
-            }
-        }
-    
-        // اگر کاربر خارج از پاپ‌آپ کلیک کرد، پاپ‌آپ بسته شود
-        window.onclick = function(event) {
-            if (event.target == document.getElementById("transactionModal")) {
-                closeModal();
-            }
-        }
+    let promptResolve;
 
+    function customPrompt(message) {
+        return new Promise((resolve) => {
+            document.getElementById("promptMessage").textContent = message;
+            document.getElementById("promptInput").value = "";
+            document.getElementById("customPrompt").style.display = "block";
+            promptResolve = resolve;
+        });
+    }
 
+    function submitPrompt() {
+        const value = document.getElementById("promptInput").value;
+        document.getElementById("customPrompt").style.display = "none";
+        promptResolve(value);
+    }
+
+    function closePrompt() {
+        document.getElementById("customPrompt").style.display = "none";
+        promptResolve(null);
+    }
+
+    // بستن پاپ‌آپ وقتی بیرون از آن کلیک شد
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("customPrompt")) {
+            closePrompt();
+        }
+    };
 
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
@@ -240,9 +243,9 @@ button:hover {
         }
 
         function addTransaction(index, type) {
-            const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
+            const amount = parseFloat(customPrompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
             if (!isNaN(amount) && amount > 0) {
-                const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
+                const description = customPrompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
                 const date = new Date().toLocaleString('fa-IR');
                 businesses[index].cash += type === 'profit' ? amount : -amount;
                 businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
