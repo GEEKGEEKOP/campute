@@ -213,7 +213,7 @@ button:hover {
             
             // تبدیل تاریخ تراکنش به شیء Date
             let transactionTime = new Date(transactionDate);
-            let now = new Date();
+            let now = new Date().toLocaleString('fa-IR');
             
             // محاسبه اختلاف ماهیانه
             let yearDiff = now.getFullYear() - transactionTime.getFullYear();
@@ -222,7 +222,8 @@ button:hover {
             let totalMonths = yearDiff * 12 + monthDiff;
             
 
-            
+            console.log(totalMonths);
+            console.log(result);
             // محاسبه مقدار نهایی
             let finalValue = result * totalMonths;
             
