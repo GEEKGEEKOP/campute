@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نرم‌افزار حسابداری</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
 /* استایل‌های کلی صفحه */
 body {
@@ -225,7 +224,7 @@ button:hover {
         
             // محاسبه مقدار اولیه
             let result = (balance * rate) / monthsInYear;
-        
+            consosle.log("------------------",transactionDate);
             // تبدیل تاریخ شمسی به میلادی
             let transactionTime = convertShamsiToMiladi(transactionDate);
             let now = new Date(); // تاریخ امروز میلادی
