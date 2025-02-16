@@ -196,38 +196,8 @@ button:hover {
                     <canvas id="chart-${index}"></canvas>
                 `;
                 list.appendChild(div);
-                renderChart(index, business.transactions);
             });
         }
-
-        function renderChart(index, transactions) {
-            const ctx = document.getElementById(`chart-${index}`).getContext('2d');
-            if (!transactions.length) return;
-            transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-            const labels = transactions.map(t => t.date);
-            const data = transactions.map(t => t.balance);
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: `موجودی ${businesses[index].name} بر اساس تراکنش‌ها`,
-                        data: data,
-                        borderColor: 'blue',
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: { title: { display: true, text: 'تاریخ' } },
-                        y: { title: { display: true, text: 'مقدار (تومان)' } }
-                    }
-                }
-            });
-        }
-
         function scrollToBusiness(index) {
             const chartElement = document.getElementById(`chart-${index}`);
             chartElement.scrollIntoView({ behavior: 'smooth' });
