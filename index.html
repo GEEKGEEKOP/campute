@@ -186,7 +186,7 @@ button:hover {
                     <h4>تراکنش‌ها:</h4>
                     <div>
                         ${business.transactions.map(t => `
-                            <div class='log'>
+                            <div class='log' data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
                                 ${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
                                 | موجودی: ${formatNumber(t.balance)} تومان 
                                 | در ازای: ${t.description}
@@ -202,6 +202,52 @@ button:hover {
             const chartElement = document.getElementById(`chart-${index}`);
             chartElement.scrollIntoView({ behavior: 'smooth' });
         }
+
+        //----------------------------------
+        function calculateValue(balance, transactionDate) {
+            const rate = 0.225;
+            const monthsInYear = 12;
+            
+            // محاسبه مقدار اولیه
+            let result = (balance * rate) / monthsInYear;
+            
+            // تبدیل تاریخ تراکنش به شیء Date
+            let transactionTime = new Date(transactionDate);
+            let now = new Date();
+            
+            // محاسبه اختلاف ماهیانه
+            let yearDiff = now.getFullYear() - transactionTime.getFullYear();
+            let monthDiff = now.getMonth() - transactionTime.getMonth();
+            
+            let totalMonths = yearDiff * 12 + monthDiff;
+            
+            // بررسی روز ماه
+            if (now.getDate() > 15) {
+                totalMonths += 0.5;
+            }
+            
+            // محاسبه مقدار نهایی
+            let finalValue = result * totalMonths;
+            
+            return finalValue.toFixed(2); // نمایش دو رقم اعشار
+        }
+        
+        function showCalculatedValue(balance, transactionDate) {
+            let value = calculateValue(balance, transactionDate);
+            alert(`مقدار محاسبه شده: ${value} تومان`);
+        }
+        
+        // اضافه کردن کلیک به لاگ‌ها
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.log').forEach(log => {
+                log.addEventListener('click', function() {
+                    let balance = parseFloat(this.getAttribute('data-balance'));
+                    let date = this.getAttribute('data-date');
+                    showCalculatedValue(balance, date);
+                });
+            });
+        });
+
 
         renderBusinesses();
     </script>
