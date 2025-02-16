@@ -206,6 +206,14 @@ button:hover {
 
         //----------------------------------بی ناموس کار نمیکنه
         // تبدیل تاریخ شمسی (مثلاً 1402/11/20) به میلادی
+  
+        
+        
+        
+        
+        
+        
+        // پروژه فردا شب
         function convertShamsiToMiladi(shamsiDate) {
             let parts = shamsiDate.split("/"); // فرض کنیم فرمت "1402/11/20" است
             let shYear = parseInt(parts[0]);
@@ -226,7 +234,7 @@ button:hover {
         
             // محاسبه مقدار اولیه
             let result = (balance * rate) / monthsInYear;
-            consosle.log("------------------",transactionDate);
+            //consosle.log("------------------",transactionDate);
             // تبدیل تاریخ شمسی به میلادی
             let transactionTime = convertShamsiToMiladi(transactionDate);
             let now = new Date(); // تاریخ امروز میلادی
@@ -266,6 +274,7 @@ button:hover {
                 });
             });
         });
+        // پروژه فردا شب
 
 
         renderBusinesses();
