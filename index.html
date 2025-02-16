@@ -204,26 +204,40 @@ button:hover {
         }
 
         //----------------------------------
+        function convertShamsiToMiladi(shamsiDate) {
+            let parts = shamsiDate.split("/"); // فرض کنیم فرمت "1402/11/20" است
+            let year = parseInt(parts[0]);
+            let month = parseInt(parts[1]);
+            let day = parseInt(parts[2]);
+            
+            let miladiDate = new Date(year + 621, month - 1, day); // تبدیل به میلادی
+            return miladiDate;
+        }
+        
         function calculateValue(balance, transactionDate) {
             const rate = 0.225;
             const monthsInYear = 12;
-            
+        
             // محاسبه مقدار اولیه
             let result = (balance * rate) / monthsInYear;
-            
-            // تبدیل تاریخ تراکنش به شیء Date
-            let transactionTime = new Date(transactionDate);
-            let now = new Date().toLocaleString('fa-IR');
-            
-            // محاسبه اختلاف ماهیانه
+        
+            // تبدیل تاریخ تراکنش از شمسی به میلادی
+            let transactionTime = convertShamsiToMiladi(transactionDate);
+            let now = new Date();
+        
+            // محاسبه اختلاف سال و ماه
             let yearDiff = now.getFullYear() - transactionTime.getFullYear();
             let monthDiff = now.getMonth() - transactionTime.getMonth();
-            
             let totalMonths = yearDiff * 12 + monthDiff;
-            
-
-            console.log(totalMonths);
-            console.log(result);
+        
+            // بررسی روز ماه برای اضافه کردن 0.5 ماه
+            if (now.getDate() > 15) {
+                totalMonths += 0.5;
+            }
+        
+            console.log("اختلاف ماهیانه:", totalMonths);
+            console.log("مقدار اولیه:", result);
+        
             // محاسبه مقدار نهایی
             let finalValue = result * totalMonths;
             
@@ -234,6 +248,7 @@ button:hover {
             let value = calculateValue(balance, transactionDate);
             alert(`مقدار محاسبه شده: ${value} تومان`);
         }
+
         
         // اضافه کردن کلیک به لاگ‌ها
         document.addEventListener('DOMContentLoaded', function() {
