@@ -5,163 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نرم‌افزار حسابداری</title>
     <style>
-        /* استایل‌های کلی صفحه */
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            text-align: right;
-            background: #f4f4f4;
-        }
+/* استایل‌های کلی صفحه */
+body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    background: #f4f4f4;
+}
 
-        .container {
-            width: 90%;
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        h2 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
-        /* استایل ورودی‌ها */
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+/* استایل ورودی‌ها */
+input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-        /* حالت focus */
-        input[type="text"]:focus, input[type="number"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
+/* حالت focus */
+input[type="text"]:focus, input[type="number"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 
-        /* استایل دکمه‌ها */
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-        }
+/* استایل متن placeholder */
+input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
 
-        button:hover {
-            background-color: #0056b3;
-        }
+/* استایل دکمه‌ها */
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
 
-        /* استایل برای شماره‌گذاری */
-        .input-number {
-            text-align: left;
-        }
+button:hover {
+    background-color: #0056b3;
+}
 
-        /* استایل دکمه حذف */
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
+/* استایل برای شماره‌گذاری */
+.input-number {
+    text-align: left;
+}
 
-        .delete-btn:hover {
-            background: #c82333;
-        }
+/* استایل دکمه حذف */
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
 
-        /* استایل برای نمایش لیست کسب‌وکار */
-        .business {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-top: 10px;
-            background: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+.delete-btn:hover {
+    background: #c82333;
+}
 
-        /* استایل برای متن تراکنش‌ها */
-        .log {
-            background: #f9f9f9;
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+/* استایل برای نمایش لیست کسب‌وکار */
+.business {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-        /* استایل پنجره مودال */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
+/* استایل برای متن تراکنش‌ها */
+.log {
+    background: #f9f9f9;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+    .modal {
+        display: none; 
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
 
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 400px;
-        }
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 400px;
+    }
 
-        .modal input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-        }
+    .close-btn {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
 
-        .modal button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
+    .close-btn:hover,
+    .close-btn:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-        .modal button:hover {
-            background-color: #0056b3;
-        }
+    input[type="number"], input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+    }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+    button {
+        width: 100%;
+        padding: 12px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+    button:hover {
+        background-color: #0056b3;
+    }
     </style>
 </head>
 <body>
@@ -172,36 +174,62 @@
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
     </div>
-
-    <!-- Modal for input -->
+    <!-- پاپ‌آپ برای ورودی -->
     <div id="transactionModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h3 id="transactionTitle"></h3>
-            <input type="number" id="transactionAmount" placeholder="مقدار" />
-            <input type="text" id="transactionDescription" placeholder="توضیحات" />
-            <button onclick="submitTransaction()">ثبت تراکنش</button>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3>افزودن سود یا ضرر</h3>
+            <label for="amount">مقدار:</label>
+            <input type="number" id="amount" placeholder="مقدار" required>
+            <label for="description">توضیحات:</label>
+            <input type="text" id="description" placeholder="توضیحات" required>
+            <button onclick="submitTransaction()">ثبت</button>
         </div>
     </div>
 
     <script>
+        function openModal() {
+            document.getElementById("transactionModal").style.display = "block";
+        }
+    
+        function closeModal() {
+            document.getElementById("transactionModal").style.display = "none";
+        }
+    
+        function submitTransaction() {
+            const amount = document.getElementById("amount").value;
+            const description = document.getElementById("description").value;
+            if (amount && description) {
+                // انجام کار با اطلاعات وارد شده
+                closeModal();
+            }
+        }
+    
+        // اگر کاربر خارج از پاپ‌آپ کلیک کرد، پاپ‌آپ بسته شود
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("transactionModal")) {
+                closeModal();
+            }
+        }
+
+
+
+        ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
-        let currentBusinessIndex = null;
-        let currentTransactionType = null;
 
         function saveData() {
             localStorage.setItem('businesses', JSON.stringify(businesses));
         }
 
         function formatInput(input) {
-            let value = input.value.replace(/[^\d]/g, '');
-            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
             input.value = value;
         }
 
         function addBusiness() {
             const name = document.getElementById('businessName').value;
-            const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, ''));
+            const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, '')); // حذف ویرگول‌ها برای تبدیل به عدد
             if (name && !isNaN(cash)) {
                 businesses.push({ name, cash, transactions: [] });
                 saveData();
@@ -211,39 +239,29 @@
             }
         }
 
-        function openTransactionModal(index, type) {
-            currentBusinessIndex = index;
-            currentTransactionType = type;
-            const title = type === 'profit' ? 'افزودن سود' : 'افزودن ضرر';
-            document.getElementById('transactionTitle').textContent = title;
-            document.getElementById('transactionModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('transactionModal').style.display = 'none';
-        }
-
-        function submitTransaction() {
-            const amount = parseFloat(document.getElementById('transactionAmount').value);
-            const description = document.getElementById('transactionDescription').value;
-            if (!isNaN(amount) && amount > 0 && description) {
+        function addTransaction(index, type) {
+            const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
+            if (!isNaN(amount) && amount > 0) {
+                const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
                 const date = new Date().toLocaleString('fa-IR');
-                businesses[currentBusinessIndex].cash += currentTransactionType === 'profit' ? amount : -amount;
-                businesses[currentBusinessIndex].transactions.push({
-                    type: currentTransactionType,
-                    amount,
-                    description,
-                    date,
-                    balance: businesses[currentBusinessIndex].cash
-                });
+                businesses[index].cash += type === 'profit' ? amount : -amount;
+                businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
                 saveData();
                 renderBusinesses();
-                closeModal();
+                scrollToBusiness(index);
+            }
+        }
+
+        function deleteBusiness(index) {
+            if (confirm("آیا مطمئن هستید که می‌خواهید این کسب‌وکار را حذف کنید؟")) {
+                businesses.splice(index, 1);
+                saveData();
+                renderBusinesses();
             }
         }
 
         function formatNumber(number) {
-            return number.toLocaleString('fa-IR');
+            return number.toLocaleString('fa-IR'); // فرمت فارسی برای اعداد
         }
 
         function renderBusinesses() {
@@ -255,31 +273,92 @@
                 div.innerHTML = `
                     <h3>${business.name}</h3>
                     <p>موجودی: ${formatNumber(business.cash)} تومان</p>
-                    <button onclick="openTransactionModal(${index}, 'profit')">افزودن سود</button>
-                    <button onclick="openTransactionModal(${index}, 'loss')">افزودن ضرر</button>
+                    <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
+                    <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
                     <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
                     <div>
                         ${business.transactions.map(t => `
-                            <div class='log' data-balance="${t.balance}" data-date="${t.date}">
+                            <div class='log' data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
                                 ${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
                                 | موجودی: ${formatNumber(t.balance)} تومان 
                                 | در ازای: ${t.description}
                             </div>
                         `).join('')}
                     </div>
+                    <canvas id="chart-${index}"></canvas>
                 `;
                 list.appendChild(div);
             });
         }
-
-        function deleteBusiness(index) {
-            if (confirm("آیا مطمئن هستید که می‌خواهید این کسب‌وکار را حذف کنید؟")) {
-                businesses.splice(index, 1);
-                saveData();
-                renderBusinesses();
-            }
+        function scrollToBusiness(index) {
+            const chartElement = document.getElementById(`chart-${index}`);
+            chartElement.scrollIntoView({ behavior: 'smooth' });
         }
+
+        //----------------------------------بی ناموس کار نمیکنه
+        // تبدیل تاریخ شمسی (مثلاً 1402/11/20) به میلادی
+        function convertShamsiToMiladi(shamsiDate) {
+            let parts = shamsiDate.split("/"); // فرض کنیم فرمت "1402/11/20" است
+            let shYear = parseInt(parts[0]);
+            let shMonth = parseInt(parts[1]);
+            let shDay = parseInt(parts[2]);
+        
+            // تبدیل سال شمسی به میلادی تقریبی
+            let gy = shYear + 621;
+            let gm = shMonth;
+            let gd = shDay;
+        
+            return new Date(gy, gm - 1, gd); // خروجی به فرمت Date میلادی
+        }
+        
+        function calculateValue(balance, transactionDate) {
+            const rate = 0.225;
+            const monthsInYear = 12;
+        
+            // محاسبه مقدار اولیه
+            let result = (balance * rate) / monthsInYear;
+            consosle.log("------------------",transactionDate);
+            // تبدیل تاریخ شمسی به میلادی
+            let transactionTime = convertShamsiToMiladi(transactionDate);
+            let now = new Date(); // تاریخ امروز میلادی
+        
+            // محاسبه اختلاف ماهیانه
+            let yearDiff = now.getFullYear() - transactionTime.getFullYear();
+            let monthDiff = now.getMonth() - transactionTime.getMonth();
+            let totalMonths = yearDiff * 12 + monthDiff;
+        
+            // بررسی روز ماه برای اضافه کردن 0.5 ماه
+            if (now.getDate() > 15) {
+                totalMonths += 0.5;
+            }
+        
+            console.log("اختلاف ماهیانه:", totalMonths); // باید عدد صحیح باشه
+            console.log("مقدار اولیه:", result);
+        
+            // محاسبه مقدار نهایی
+            let finalValue = result * totalMonths;
+            
+            return isNaN(finalValue) ? "خطا در محاسبه!" : finalValue.toFixed(2);
+        }
+        
+        function showCalculatedValue(balance, transactionDate) {
+            let value = calculateValue(balance, transactionDate);
+            alert(`مقدار محاسبه شده: ${value} تومان`);
+        }
+
+        
+        // اضافه کردن کلیک به لاگ‌ها
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.log').forEach(log => {
+                log.addEventListener('click', function() {
+                    let balance = parseFloat(this.getAttribute('data-balance'));
+                    let date = this.getAttribute('data-date');
+                    showCalculatedValue(balance, date);
+                });
+            });
+        });
+
 
         renderBusinesses();
     </script>
