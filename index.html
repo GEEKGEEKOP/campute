@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali-js.min.js"></script>
     <title>نرم‌افزار حسابداری</title>
     <style>
 /* استایل‌های کلی صفحه */
@@ -210,7 +211,7 @@ button:hover {
                     <div class="transactions-list">
                         ${business.transactions.map(t => `
                             <div class='log' data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
-                                ${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
+                                ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
                                 | موجودی: ${formatNumber(t.balance)} تومان 
                                 | در ازای: ${t.description}
                             </div>
