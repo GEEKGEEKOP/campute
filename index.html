@@ -151,7 +151,7 @@ button:hover {
             const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
             if (!isNaN(amount) && amount > 0) {
                 const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
-                const date = new Date().toLocaleString('fa-IR');
+                const date = new Date();
                 businesses[index].cash += type === 'profit' ? amount : -amount;
                 businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
                 saveData();
@@ -169,7 +169,7 @@ button:hover {
         }
 
         function formatNumber(number) {
-            return number.toLocaleString('fa-IR'); // فرمت فارسی برای اعداد
+            return number; // فرمت فارسی برای اعداد
         }
 
         function renderBusinesses() {
@@ -230,7 +230,7 @@ button:hover {
             const [hour, minute, second] = timePart.split(':').map(Number);
 
             // ایجاد شیء Date (توجه: ماه در جاوااسکریپت از ۰ شروع می‌شود، بنابراین month - 1)
-            return new Date(year, month - 1, day).toLocaleString('fa-IR');   
+            return new Date(year, month - 1, day); 
         }
  
         function calculateValue(balance, transactionDate) {
