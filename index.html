@@ -325,12 +325,24 @@ button:hover {
             return yearDiff * 12 + monthDiff;
         }
         
-        
+
+        function getDayDifference(date1, date2) {
+            const d1 = new Date(date1);
+            const d2 = new Date(date2);
+            const diffMs = d2 - d1; // اختلاف برحسب میلی‌ثانیه
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)); // تبدیل میلی‌ثانیه به روز
+            return diffDays;
+        }
+
+
+
+
+
         //  Doneپروژه فردا شب
 
         function calculateValue(balance, transactionDate) {
-            const rate = 0.225;
-            const monthsInYear = 12;
+            const rate = 22.5;
+            const monthsInYear = 365;
         
             // محاسبه مقدار اولیه
             let result = (balance * rate) / monthsInYear;
@@ -343,7 +355,7 @@ button:hover {
             // محاسبه اختلاف ماهیانه
             let yearDiff = now.getFullYear() - transactionTime.getFullYear();
             let monthDiff = now.getMonth() - transactionTime.getMonth();
-            let totalMonths = getMonthDifference(now,transactionTime);
+            let totalMonths = getDayDifference(transactionTime,now);
         
         
             console.log("اختلاف ماهیانه:", totalMonths); // باید عدد صحیح باشه
