@@ -230,7 +230,7 @@ button:hover {
             const [hour, minute, second] = timePart.split(':').map(Number);
 
             // ایجاد شیء Date (توجه: ماه در جاوااسکریپت از ۰ شروع می‌شود، بنابراین month - 1)
-            return new Date(year, month - 1, day);
+            return new Date(year, month - 1, day).toLocaleString('fa-IR');   
         }
  
         function calculateValue(balance, transactionDate) {
