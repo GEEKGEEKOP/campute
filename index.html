@@ -376,12 +376,14 @@ button:hover {
         
         // اضافه کردن کلیک به لاگ‌ها
         document.addEventListener('DOMContentLoaded', function() {
+            let executed = false;
             document.querySelectorAll('.log').forEach(log => {
-                log.addEventListener('click', function() {
-                    let balance = parseFloat(this.getAttribute('data-balance'));
-                    let date = this.getAttribute('data-date');
-                    showCalculatedValue(balance, date);
-                });
+                         if (executed) return; // اگر قبلاً اجرا شده بود، خروج از تابع
+                              executed = true; // علامت می‌زنیم که تابع اجرا شده است
+                              let balance = parseFloat(this.getAttribute('data-balance'));
+                              let date = this.getAttribute('data-date');
+                              showCalculatedValue(balance, date); 
+                                        
             });
         });
         // Doneپروژه فردا شب
