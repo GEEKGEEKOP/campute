@@ -362,9 +362,9 @@ button:hover {
             console.log("مقدار اولیه:", result);
         
             // محاسبه مقدار نهایی
-            let finalValue = result * totalMonths;
+            let finalValue = Math.round(result * totalMonths//100);
             
-            return isNaN(finalValue) ? "خطا در محاسبه!" : finalValue.toFixed(2);
+            return isNaN(finalValue) ? "خطا در محاسبه!" : finalValue;
         }
         
         function showCalculatedValue(balance, transactionDate) {
