@@ -199,7 +199,7 @@ button:hover {
                     <h3>${business.name}</h3>
                     <p>موجودی: ${formatNumber(business.cash)} تومان</p>
                     <div class="transaction-controls">
-                        <input type="number" id="transaction-amount-${index}" placeholder="مقدار (تومان)" oninput="formatInput(this)" />
+                        <input type="text" class="input-number" id="transaction-amount-${index}" placeholder="مقدار (تومان)" oninput="formatInput(this)" />
                         <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
                         <input type="datetime-local" id="transaction-date-${index}" value="${currentDateTime}" />
                         <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
