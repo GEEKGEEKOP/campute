@@ -124,17 +124,17 @@ button:hover {
     <script>
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
-
+        
         function saveData() {
             localStorage.setItem('businesses', JSON.stringify(businesses));
         }
-
+        
         function formatInput(input) {
             let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
             value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
             input.value = value;
         }
-
+        
         function addBusiness() {
             const name = document.getElementById('businessName').value;
             const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, '')); // حذف ویرگول‌ها برای تبدیل به عدد
@@ -146,20 +146,35 @@ button:hover {
                 document.getElementById('initialCash').value = '';
             }
         }
-
+        
         function addTransaction(index, type) {
-            const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
-            if (!isNaN(amount) && amount > 0) {
-                const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
-                const date = new Date();
+            // دریافت مقادیر ورودی از فیلدهای مربوط به کسب‌وکار با اندیس index
+            const amountInput = document.getElementById(`transaction-amount-${index}`);
+            const descriptionInput = document.getElementById(`transaction-description-${index}`);
+            const dateInput = document.getElementById(`transaction-date-${index}`);
+        
+            const amount = parseFloat(amountInput.value.replace(/,/g, ''));
+            const description = descriptionInput.value.trim();
+            // اگر فیلد زمان مقدار داشته باشد، از آن استفاده می‌کنیم، در غیر این صورت زمان فعلی را می‌گیریم
+            const date = dateInput.value ? new Date(dateInput.value) : new Date();
+        
+            if (!isNaN(amount) && amount > 0 && description) {
                 businesses[index].cash += type === 'profit' ? amount : -amount;
-                businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
+                businesses[index].transactions.push({ 
+                    type, 
+                    amount, 
+                    description, 
+                    date: date.toLocaleString(), 
+                    balance: businesses[index].cash 
+                });
                 saveData();
                 renderBusinesses();
                 scrollToBusiness(index);
+            } else {
+                alert("لطفاً مقدار و توضیحات معتبر وارد کنید");
             }
         }
-
+        
         function deleteBusiness(index) {
             if (confirm("آیا مطمئن هستید که می‌خواهید این کسب‌وکار را حذف کنید؟")) {
                 businesses.splice(index, 1);
@@ -167,25 +182,32 @@ button:hover {
                 renderBusinesses();
             }
         }
-
+        
         function formatNumber(number) {
-            return number; // فرمت فارسی برای اعداد
+            return number; // فرمت فارسی برای اعداد (در صورت نیاز می‌توان تغییر داد)
         }
-
+        
         function renderBusinesses() {
             const list = document.getElementById('businessList');
             list.innerHTML = '';
             businesses.forEach((business, index) => {
+                // مقدار پیش‌فرض برای زمان به فرمتی که فیلد datetime-local می‌پذیرد
+                const currentDateTime = new Date().toISOString().slice(0,16);
                 const div = document.createElement('div');
                 div.classList.add('business');
                 div.innerHTML = `
                     <h3>${business.name}</h3>
                     <p>موجودی: ${formatNumber(business.cash)} تومان</p>
-                    <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
-                    <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
+                    <div class="transaction-controls">
+                        <input type="number" id="transaction-amount-${index}" placeholder="مقدار (تومان)" />
+                        <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
+                        <input type="datetime-local" id="transaction-date-${index}" value="${currentDateTime}" />
+                        <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
+                        <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
+                    </div>
                     <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
-                    <div>
+                    <div class="transactions-list">
                         ${business.transactions.map(t => `
                             <div class='log' data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
                                 ${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
@@ -199,10 +221,93 @@ button:hover {
                 list.appendChild(div);
             });
         }
+        
         function scrollToBusiness(index) {
             const chartElement = document.getElementById(`chart-${index}`);
             chartElement.scrollIntoView({ behavior: 'smooth' });
         }
+
+        ///////////////////////////////////////////
+        // let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
+
+        // function saveData() {
+        //     localStorage.setItem('businesses', JSON.stringify(businesses));
+        // }
+
+        // function formatInput(input) {
+        //     let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
+        //     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
+        //     input.value = value;
+        // }
+
+        // function addBusiness() {
+        //     const name = document.getElementById('businessName').value;
+        //     const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, '')); // حذف ویرگول‌ها برای تبدیل به عدد
+        //     if (name && !isNaN(cash)) {
+        //         businesses.push({ name, cash, transactions: [] });
+        //         saveData();
+        //         renderBusinesses();
+        //         document.getElementById('businessName').value = '';
+        //         document.getElementById('initialCash').value = '';
+        //     }
+        // }
+
+        // function addTransaction(index, type) {
+        //     const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
+        //     if (!isNaN(amount) && amount > 0) {
+        //         const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
+        //         const date = new Date();
+        //         businesses[index].cash += type === 'profit' ? amount : -amount;
+        //         businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
+        //         saveData();
+        //         renderBusinesses();
+        //         scrollToBusiness(index);
+        //     }
+        // }
+
+        // function deleteBusiness(index) {
+        //     if (confirm("آیا مطمئن هستید که می‌خواهید این کسب‌وکار را حذف کنید؟")) {
+        //         businesses.splice(index, 1);
+        //         saveData();
+        //         renderBusinesses();
+        //     }
+        // }
+
+        // function formatNumber(number) {
+        //     return number; // فرمت فارسی برای اعداد
+        // }
+
+        // function renderBusinesses() {
+        //     const list = document.getElementById('businessList');
+        //     list.innerHTML = '';
+        //     businesses.forEach((business, index) => {
+        //         const div = document.createElement('div');
+        //         div.classList.add('business');
+        //         div.innerHTML = `
+        //             <h3>${business.name}</h3>
+        //             <p>موجودی: ${formatNumber(business.cash)} تومان</p>
+        //             <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
+        //             <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
+        //             <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
+        //             <h4>تراکنش‌ها:</h4>
+        //             <div>
+        //                 ${business.transactions.map(t => `
+        //                     <div class='log' data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
+        //                         ${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
+        //                         | موجودی: ${formatNumber(t.balance)} تومان 
+        //                         | در ازای: ${t.description}
+        //                     </div>
+        //                 `).join('')}
+        //             </div>
+        //             <canvas id="chart-${index}"></canvas>
+        //         `;
+        //         list.appendChild(div);
+        //     });
+        // }
+        // function scrollToBusiness(index) {
+        //     const chartElement = document.getElementById(`chart-${index}`);
+        //     chartElement.scrollIntoView({ behavior: 'smooth' });
+        // }
 
         //----------------------------------بی ناموس کار نمیکنه
         // تبدیل تاریخ شمسی (مثلاً 1402/11/20) به میلادی
@@ -221,7 +326,7 @@ button:hover {
         }
         
         
-        // پروژه فردا شب
+        //  Doneپروژه فردا شب
 
         function calculateValue(balance, transactionDate) {
             const rate = 0.225;
@@ -266,7 +371,7 @@ button:hover {
                 });
             });
         });
-        // پروژه فردا شب
+        // Doneپروژه فردا شب
 
 
         renderBusinesses();
