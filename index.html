@@ -210,29 +210,19 @@ button:hover {
         
         
         
-        
+        function getMonthDifference(date1, date2) {
+            const d1 = new Date(date1);
+            const d2 = new Date(date2);
+
+            let yearDiff = d2.getFullYear() - d1.getFullYear();
+            let monthDiff = d2.getMonth() - d1.getMonth();
+
+            return yearDiff * 12 + monthDiff;
+        }
         
         
         // پروژه فردا شب
-        function convertPersianToLatinNumbers(input) {
-            const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-            return input.replace(/[۰-۹]/g, (char) => persianNumbers.indexOf(char));
-        }
 
-        // تابع برای تبدیل رشته تاریخ به شیء Date
-        function parseCustomDate(dateString) {
-            // تبدیل اعداد فارسی به لاتین
-            const latinDateString = convertPersianToLatinNumbers(dateString);
-
-            // تقسیم رشته به قسمت‌های تاریخ و زمان
-            const [datePart, timePart] = latinDateString.split(', ');
-            const [year, month, day] = datePart.split('/').map(Number);
-            const [hour, minute, second] = timePart.split(':').map(Number);
-
-            // ایجاد شیء Date (توجه: ماه در جاوااسکریپت از ۰ شروع می‌شود، بنابراین month - 1)
-            return new Date(year, month - 1, day); 
-        }
- 
         function calculateValue(balance, transactionDate) {
             const rate = 0.225;
             const monthsInYear = 12;
@@ -240,19 +230,16 @@ button:hover {
             // محاسبه مقدار اولیه
             let result = (balance * rate) / monthsInYear;
             console.log("------------------",transactionDate);
+            let transactionTime = new Date(transactionDate);
             // تبدیل تاریخ شمسی به میلادی
-            let transactionTime = convertShamsiToMiladi(transactionDate);
+            //let transactionTime = convertShamsiToMiladi(transactionDate);
             let now = new Date(); // تاریخ امروز میلادی
         
             // محاسبه اختلاف ماهیانه
             let yearDiff = now.getFullYear() - transactionTime.getFullYear();
             let monthDiff = now.getMonth() - transactionTime.getMonth();
-            let totalMonths = yearDiff * 12 + monthDiff;
+            let totalMonths = getMonthDifference(now,transactionTime);
         
-            // بررسی روز ماه برای اضافه کردن 0.5 ماه
-            if (now.getDate() > 15) {
-                totalMonths += 0.5;
-            }
         
             console.log("اختلاف ماهیانه:", totalMonths); // باید عدد صحیح باشه
             console.log("مقدار اولیه:", result);
