@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/css/persian-datepicker.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali-js.min.js"></script>
     <title>نرم‌افزار حسابداری</title>
     <style>
 /* استایل‌های کلی صفحه */
@@ -120,10 +121,6 @@ button:hover {
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/js/persian-datepicker.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali-js.min.js"></script>
     <script>
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
@@ -210,6 +207,26 @@ button:hover {
                         <input type="datetime-local" id="transaction-date-${index}" value="${currentDateTime}" />
                         <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
                         <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <!-- Persian Date & Persian Datepicker -->
+                            <script src="https://cdn.jsdelivr.net/npm/persian-date@latest/dist/persian-date.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+                        
+                            <script>
+                                $(document).ready(function() {
+                                    // مقداردهی اولیه به تاریخ شمسی
+                                    var initialDate = new persianDate().format('YYYY/MM/DD');
+                        
+                                    // مقداردهی به فیلد ورودی
+                                    $('#transaction-date-${index}').val(initialDate);
+                        
+                                    // فعال‌سازی Persian Datepicker
+                                    $('#transaction-date-${index}').persianDatepicker({
+                                        format: 'YYYY/MM/DD',
+                                        initialValue: false
+                                    });
+                                });
+                            </script>
                     </div>
                     <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
