@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/css/persian-datepicker.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali-js.min.js"></script>
     <!-- Persian Datepicker CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@latest/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker-custom.css">
     <title>نرم‌افزار حسابداری</title>
@@ -191,14 +194,13 @@ button:hover {
         }
 
 
-
-
+        
         function renderBusinesses() {
             const list = document.getElementById('businessList');
             list.innerHTML = '';
             businesses.forEach((business, index) => {
-                // مقدار پیش‌فرض برای زمان به فرمتی که فیلد datetime-local می‌پذیرد
-                const currentDateTime = new Date().toISOString().slice(0,16);
+                // استفاده از تاریخ شمسی به عنوان مقدار اولیه
+                const initialDate = new persianDate().format('YYYY/MM/DD');
                 const div = document.createElement('div');
                 div.classList.add('business');
                 div.innerHTML = `
@@ -207,35 +209,16 @@ button:hover {
                     <div class="transaction-controls">
                         <input type="text" class="input-number" id="transaction-amount-${index}" placeholder="مقدار (تومان)" oninput="formatInput(this)" />
                         <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
-                        <input type="datetime-local" id="transaction-date-${index}" value="${currentDateTime}" />
+                        <!-- تغییر نوع input به text -->
+                        <input type="text" id="transaction-date-${index}" placeholder="انتخاب تاریخ" value="${initialDate}" />
                         <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
                         <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
-                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                            <!-- Persian Date & Persian Datepicker -->
-                            <script src="https://cdn.jsdelivr.net/npm/persian-date@latest/dist/persian-date.min.js"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
-                        
-                            <script>
-                                $(document).ready(function() {
-                                    // مقداردهی اولیه به تاریخ شمسی
-                                    var initialDate = new persianDate().format('YYYY/MM/DD');
-                        
-                                    // مقداردهی به فیلد ورودی
-                                    $('#transaction-date-${index}').val(initialDate);
-                        
-                                    // فعال‌سازی Persian Datepicker
-                                    $('#transaction-date-${index}').persianDatepicker({
-                                        format: 'YYYY/MM/DD',
-                                        initialValue: false
-                                    });
-                                });
-                            </script>
                     </div>
                     <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
                     <div class="transactions-list">
                         ${business.transactions.map(t => `
-                            <div class='log' data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
+                            <div class="log" data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
                                 ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
                                 | موجودی: ${formatNumber(t.balance)} تومان 
                                 | در ازای: ${t.description}
@@ -245,8 +228,18 @@ button:hover {
                     <canvas id="chart-${index}"></canvas>
                 `;
                 list.appendChild(div);
+        
+                // فعال‌سازی Persian Datepicker روی input تاریخ برای هر کسب‌وکار
+                $(`#transaction-date-${index}`).persianDatepicker({
+                    format: 'YYYY/MM/DD',
+                    initialValue: true,
+                    autoClose: true
+                });
             });
         }
+
+
+        
         
         function scrollToBusiness(index) {
             const chartElement = document.getElementById(`chart-${index}`);
