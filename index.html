@@ -155,7 +155,12 @@ button:hover {
             }
         }
 
-        
+        function convertPersianToEnglish(str) {
+          return str.replace(/[۰-۹]/g, function(match) {
+            // اختلاف کد یونیکد بین رقم فارسی '۰' و رقم انگلیسی '0' برابر 1776 است.
+            return String.fromCharCode(match.charCodeAt(0) - 1776);
+          });
+        } 
         function addTransaction(index, type) {
             // دریافت مقادیر ورودی از فیلدهای مربوط به کسب‌وکار با اندیس index
             const amountInput = document.getElementById(`transaction-amount-${index}`);
@@ -166,8 +171,8 @@ button:hover {
             const description = descriptionInput.value.trim();
             // اگر فیلد زمان مقدار داشته باشد، از آن استفاده می‌کنیم، در غیر این صورت زمان فعلی را می‌گیریم
             console.log("*****",dateInput.value);
-            console.log("#####",dateInput.value.toLocaleDateString('en-US'));
-            const date = dateInput.value ? new Date(dateInput.value) : new Date();
+            console.log("#####",new Date(convertPersianToEnglish(dateInput.value)).toLocaleDateString('en-US'));
+            const date = dateInput.value ? new Date(convertPersianToEnglish(dateInput.value)) : new Date();
         
             if (!isNaN(amount) && amount > 0 && description) {
                 businesses[index].cash += type === 'profit' ? amount : -amount;
