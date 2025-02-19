@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/css/persian-datepicker.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali-js.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali-js.min.js"></script>-->
     <!-- Persian Datepicker CSS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/persian-date@latest/dist/persian-date.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker-custom.css">
-    <script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0/dist/jalaali.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0/dist/jalaali.min.js"></script>-->
+    <script src="https://unpkg.com/jalaali-js/dist/jalaali.min.js"></script>
     <title>نرم‌افزار حسابداری</title>
     <style>
 /* استایل‌های کلی صفحه */
@@ -153,10 +154,28 @@ button:hover {
                 document.getElementById('initialCash').value = '';
             }
         }
+        // تابع برای تبدیل ارقام فارسی به انگلیسی
+        function persianToEnglishDigits(str) {
+          return str.replace(/[۰-۹]/g, function(digit) {
+            // تبدیل کد هر رقم فارسی به رقم انگلیسی
+            return String.fromCharCode(digit.charCodeAt(0) - 1776);
+          });
+        }
+
         function convertJalaliToGregorian(jalaliDate) {
-            let [jy, jm, jd] = jalaliDate.split('/').map(Number);
-            let { gy, gm, gd } = jalaali.toGregorian(jy, jm, jd);
-            return `${gy}/${String(gm).padStart(2, '0')}/${String(gd).padStart(2, '0')}`;
+          // ابتدا ارقام فارسی را به انگلیسی تبدیل می‌کنیم
+          jalaliDate = persianToEnglishDigits(jalaliDate);
+          
+          // تقسیم رشته تاریخ به بخش‌های سال، ماه و روز و تبدیل به عدد
+          let [jy, jm, jd] = jalaliDate.split('/').map(Number);
+          
+          // تبدیل تاریخ شمسی به میلادی با استفاده از jalaali-js
+          let { gy, gm, gd } = jalaali.toGregorian(jy, jm, jd);
+          
+          // فرمت کردن خروجی به صورت YYYY-MM-DD
+          return `${gy}-${String(gm).padStart(2, '0')}-${String(gd).padStart(2, '0')}`;
+        }
+
         }
         function addTransaction(index, type) {
             // دریافت مقادیر ورودی از فیلدهای مربوط به کسب‌وکار با اندیس index
@@ -168,6 +187,7 @@ button:hover {
             const description = descriptionInput.value.trim();
             // اگر فیلد زمان مقدار داشته باشد، از آن استفاده می‌کنیم، در غیر این صورت زمان فعلی را می‌گیریم
             console.log("*****",dateInput.value);
+            console.log("#####",convertJalaliToGregorian(dateInput.value));
             const date = convertJalaliToGregorian(dateInput.value) ? new Date(convertJalaliToGregorian(dateInput.value)) : new Date();
         
             if (!isNaN(amount) && amount > 0 && description) {
