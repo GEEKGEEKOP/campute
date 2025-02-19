@@ -166,8 +166,8 @@ button:hover {
             const description = descriptionInput.value.trim();
             // اگر فیلد زمان مقدار داشته باشد، از آن استفاده می‌کنیم، در غیر این صورت زمان فعلی را می‌گیریم
             console.log("*****",dateInput.value);
-            console.log("#####",convertJalaliToGregorian(dateInput.value));
-            const date = convertJalaliToGregorian(dateInput.value) ? new Date(convertJalaliToGregorian(dateInput.value)) : new Date();
+            console.log("#####",dateInput.value.toLocaleDateString('en-US'));
+            const date = dateInput.value ? new Date(dateInput.value) : new Date();
         
             if (!isNaN(amount) && amount > 0 && description) {
                 businesses[index].cash += type === 'profit' ? amount : -amount;
@@ -175,7 +175,7 @@ button:hover {
                     type, 
                     amount, 
                     description, 
-                    date: date.toLocaleString(), 
+                    date: date.toLocaleString('en-US'), 
                     balance: businesses[index].cash 
                 });
                 saveData();
