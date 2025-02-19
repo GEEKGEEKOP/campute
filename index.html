@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker-custom.css">
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0/dist/jalaali.min.js"></script>
     <title>نرم‌افزار حسابداری</title>
     <style>
 /* استایل‌های کلی صفحه */
@@ -152,7 +153,11 @@ button:hover {
                 document.getElementById('initialCash').value = '';
             }
         }
-        
+        function convertJalaliToGregorian(jalaliDate) {
+            let [jy, jm, jd] = jalaliDate.split('/').map(Number);
+            let { gy, gm, gd } = jalaali.toGregorian(jy, jm, jd);
+            return `${gy}/${String(gm).padStart(2, '0')}/${String(gd).padStart(2, '0')}`;
+        }
         function addTransaction(index, type) {
             // دریافت مقادیر ورودی از فیلدهای مربوط به کسب‌وکار با اندیس index
             const amountInput = document.getElementById(`transaction-amount-${index}`);
@@ -162,7 +167,8 @@ button:hover {
             const amount = parseFloat(amountInput.value.replace(/,/g, ''));
             const description = descriptionInput.value.trim();
             // اگر فیلد زمان مقدار داشته باشد، از آن استفاده می‌کنیم، در غیر این صورت زمان فعلی را می‌گیریم
-            const date = dateInput.value ? new Date(dateInput.value) : new Date();
+            console.log("*****",dateInput.value);
+            const date = convertJalaliToGregorian(dateInput.value) ? new Date(convertJalaliToGregorian(dateInput.value)) : new Date();
         
             if (!isNaN(amount) && amount > 0 && description) {
                 businesses[index].cash += type === 'profit' ? amount : -amount;
