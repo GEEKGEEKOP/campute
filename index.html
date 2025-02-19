@@ -154,27 +154,6 @@ button:hover {
                 document.getElementById('initialCash').value = '';
             }
         }
-        // تابع برای تبدیل ارقام فارسی به انگلیسی
-        function persianToEnglishDigits(str) {
-          return str.replace(/[۰-۹]/g, function(digit) {
-            // تبدیل کد هر رقم فارسی به رقم انگلیسی
-            return String.fromCharCode(digit.charCodeAt(0) - 1776);
-          });
-        }
-
-        function convertJalaliToGregorian(jalaliDate) {
-          // ابتدا ارقام فارسی را به انگلیسی تبدیل می‌کنیم
-          jalaliDate = persianToEnglishDigits(jalaliDate);
-          
-          // تقسیم رشته تاریخ به بخش‌های سال، ماه و روز و تبدیل به عدد
-          let [jy, jm, jd] = jalaliDate.split('/').map(Number);
-          
-          // تبدیل تاریخ شمسی به میلادی با استفاده از jalaali-js
-          let { gy, gm, gd } = jalaali.toGregorian(jy, jm, jd);
-          
-          // فرمت کردن خروجی به صورت YYYY-MM-DD
-          return `${gy}-${String(gm).padStart(2, '0')}-${String(gd).padStart(2, '0')}`;
-        }
 
         
         function addTransaction(index, type) {
