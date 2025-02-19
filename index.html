@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker-custom.css">
     <!--<script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0/dist/jalaali.min.js"></script>-->
     <script src="https://unpkg.com/jalaali-js/dist/jalaali.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
     <title>نرم‌افزار حسابداری</title>
     <style>
 /* استایل‌های کلی صفحه */
@@ -154,13 +156,12 @@ button:hover {
                 document.getElementById('initialCash').value = '';
             }
         }
-
+        function convertJalaliToGregorian(jalaliDate) {
+            return moment(jalaliDate, 'jYYYY/jM/jD').format('YYYY-MM-DD');
+        }
         function convertPersianToEnglish(str) {
-          return str.replace(/[۰-۹]/g, function(match) {
-            // اختلاف کد یونیکد بین رقم فارسی '۰' و رقم انگلیسی '0' برابر 1776 است.
-            return String.fromCharCode(match.charCodeAt(0) - 1776);
-          });
-        } 
+            return str.replace(/[۰-۹]/g, d => "0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(d)]);
+        }
         function addTransaction(index, type) {
             // دریافت مقادیر ورودی از فیلدهای مربوط به کسب‌وکار با اندیس index
             const amountInput = document.getElementById(`transaction-amount-${index}`);
@@ -172,7 +173,8 @@ button:hover {
             // اگر فیلد زمان مقدار داشته باشد، از آن استفاده می‌کنیم، در غیر این صورت زمان فعلی را می‌گیریم
             console.log("*****",dateInput.value);
             console.log("#####",convertPersianToEnglish(dateInput.value));
-            const date = dateInput.value ? new Date(convertPersianToEnglish(dateInput.value)) : new Date();
+            console.log("XXXXX",convertJalaliToGregorian(convertPersianToEnglish(dateInput.value)));
+            const date = dateInput.value ? new Date(convertJalaliToGregorian(convertPersianToEnglish(dateInput.value))) : new Date();
         
             if (!isNaN(amount) && amount > 0 && description) {
                 businesses[index].cash += type === 'profit' ? amount : -amount;
