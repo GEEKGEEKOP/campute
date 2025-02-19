@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>نمونه استفاده از jalaali-js و moment-jalaali با CDN</title>
+  <!-- بارگذاری jalaali-js از unpkg -->
+  <script src="https://unpkg.com/jalaali-js@1.1.0"></script>
+  <!-- بارگذاری moment.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+  <!-- بارگذاری moment-jalaali -->
+  <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
+</head>
+<body>
+  <script>
+    // استفاده از jalaali-js
+    var g = jalaali.toGregorian(1379, 2, 10);
+    var j = jalaali.toJalaali(new Date(2000, 4 - 1, 29)); // توجه: ماه‌ها از ۰ شروع می‌شوند
+
+    // استفاده از moment-jalaali
+    var m = moment('1379/2/10', 'jYYYY/jM/jD'); // پارس تاریخ جلالی
+    var gregorian = m.format('jYYYY/jM/jD [is] YYYY/M/D');
+
+    console.log('jalaali-js version:', g, j, 'moment-jalaali version: ', gregorian);
+  </script>
+</body>
+</html>
+
