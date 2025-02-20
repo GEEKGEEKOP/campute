@@ -318,7 +318,7 @@ button:hover {
         }
         
         function formatNumber(number) {
-            return number; // فرمت فارسی برای اعداد (در صورت نیاز می‌توان تغییر داد)
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // فرمت فارسی برای اعداد (در صورت نیاز می‌توان تغییر داد)
         }
 
 
@@ -421,7 +421,7 @@ button:hover {
         // }
 
         // function formatNumber(number) {
-        //     return number; // فرمت فارسی برای اعداد
+        //     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // فرمت فارسی برای اعداد
         // }
 
         // function renderBusinesses() {
