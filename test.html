@@ -1,29 +1,27 @@
-<script>
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرمت‌دهی عدد در تگ‌ها</title>
+</head>
+<body>
+    <p id="number1">155465</p>
+    <p id="number2">1234567.8945646546546</p>
+    <p id="number3">987654321</p>
 
-
-/*        
-        function formatInput(input) {
-            let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
-            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
-            input.value = value;
+    <script>
+        function formatNumber(element) {
+            let text = element.innerText;
+            let formattedNumber = text.replace(/[^\d.]/g, '')
+                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            element.innerText = formattedNumber;
         }
-*/
-        function formatInput(input) {
-            // جدا کردن بخش صحیح و اعشاری
-            let parts = input.value.split('.');
-            let integerPart = parts[0]; // بخش صحیح
-            let decimalPart = parts.length > 1 ? '.' + parts[1] : ''; // بخش اعشاری (اگر وجود داشت)
 
-            // حذف کاراکترهای غیر عددی از بخش صحیح
-            integerPart = integerPart.replace(/[^\d]/g, '');
-
-            // افزودن ویرگول به بخش صحیح
-            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-            // ترکیب بخش صحیح و اعشاری
-            input.value = integerPart + decimalPart;
-        }
-        console.log("---------",formatInput(155465))
-
-
-</script>
+        // اعمال تابع روی تگ‌ها
+        formatNumber(document.getElementById('number1'));
+        formatNumber(document.getElementById('number2'));
+        formatNumber(document.getElementById('number3'));
+    </script>
+</body>
+</html>

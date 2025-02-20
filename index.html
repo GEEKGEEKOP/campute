@@ -333,11 +333,31 @@ button:hover {
                 renderBusinesses();
             }
         }
-        
+       /* 
         function formatNumber(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // فرمت فارسی برای اعداد (در صورت نیاز می‌توان تغییر داد)
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
         }
+        */
+        function formatNumber(number) {
+            // ابتدا اطمینان حاصل می‌کنیم که ورودی یک عدد است
+            if (isNaN(number)) {
+                console.error("The input is not a valid number");
+                return;
+            }
 
+            let text = number.toString(); // تبدیل عدد به رشته
+            let parts = text.split('.');
+            let integerPart = parts[0];
+            let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+
+            // حذف همه کاراکترهای غیر عددی
+            integerPart = integerPart.replace(/[^\d]/g, '');
+
+            // جدا کردن هزارگان
+            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            return integerPart + decimalPart;
+        }
 
         
         function renderBusinesses() {
