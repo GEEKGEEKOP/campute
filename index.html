@@ -255,13 +255,28 @@ button:hover {
         function saveData() {
             localStorage.setItem('businesses', JSON.stringify(businesses));
         }
-        
+/*        
         function formatInput(input) {
             let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
             value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
             input.value = value;
         }
-        
+*/
+        function formatInput(input) {
+            // جدا کردن بخش صحیح و اعشاری
+            let parts = input.value.split('.');
+            let integerPart = parts[0]; // بخش صحیح
+            let decimalPart = parts.length > 1 ? '.' + parts[1] : ''; // بخش اعشاری (اگر وجود داشت)
+
+            // حذف کاراکترهای غیر عددی از بخش صحیح
+            integerPart = integerPart.replace(/[^\d]/g, '');
+
+            // افزودن ویرگول به بخش صحیح
+            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            // ترکیب بخش صحیح و اعشاری
+            input.value = integerPart + decimalPart;
+        }
         function addBusiness() {
             const name = document.getElementById('businessName').value;
             const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, '')); // حذف ویرگول‌ها برای تبدیل به عدد
