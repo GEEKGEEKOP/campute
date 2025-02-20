@@ -244,6 +244,7 @@ button:hover {
         <h2>مدیریت کسب‌وکارها</h2>
         <input type="text" id="businessName" placeholder="نام کسب‌وکار">
         <input type="text" id="initialCash" class="input-number" placeholder="بازآورده اولیه" oninput="formatInput(this)">
+        <input type="text" id="currencyunit" placeholder="واحد پول کسب و کار را وارد کنید">
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
     </div>
@@ -264,8 +265,9 @@ button:hover {
         function addBusiness() {
             const name = document.getElementById('businessName').value;
             const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, '')); // حذف ویرگول‌ها برای تبدیل به عدد
+            const currencyunit = document.getElementById('currencyunit').value;
             if (name && !isNaN(cash)) {
-                businesses.push({ name, cash, transactions: [] });
+                businesses.push({ name, cash, currencyunit,transactions: [] });
                 saveData();
                 renderBusinesses();
                 document.getElementById('businessName').value = '';
@@ -333,7 +335,7 @@ button:hover {
                 div.classList.add('business');
                 div.innerHTML = `
                     <h3>${business.name}</h3>
-                    <p>موجودی: ${formatNumber(business.cash)} تومان</p>
+                    <p>موجودی: ${formatNumber(business.cash)} ${business.currencyunit}</p>
                     <div class="transaction-controls">
                         <input type="text" class="input-number" id="transaction-amount-${index}" placeholder="مقدار (تومان)" oninput="formatInput(this)" />
                         <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
@@ -347,8 +349,8 @@ button:hover {
                     <div class="transactions-list">
                         ${business.transactions.map(t => `
                             <div class="log" data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
-                                ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
-                                | موجودی: ${formatNumber(t.balance)} تومان 
+                                ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} ${business.currencyunit}
+                                | موجودی: ${formatNumber(t.balance)} ${business.currencyunit}
                                 | در ازای: ${t.description}
                             </div>
                         `).join('')}
