@@ -400,7 +400,8 @@ button:hover {
                 div.classList.add('business');
                 div.innerHTML = `
                     <h3>${business.name}</h3>
-                    <p>موجودی: ${formatNumber(totalAmount)} ${business.currencyunit}</p>
+                    <p>سرمایه اولیه: ${formatNumber(business.cash)} ${business.currencyunit}</p>
+                    <p>موجودی لحظه ای: ${formatNumber(totalAmount)} ${business.currencyunit}</p>
                     <div class="transaction-controls">
                         <input type="text" class="input-number" id="transaction-amount-${index}" placeholder="مقدار" oninput="formatInput(this)" />
                         <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
