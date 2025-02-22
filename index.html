@@ -243,7 +243,7 @@ button:hover {
     <div class="container">
         <h2>مدیریت کسب‌وکارها</h2>
         <input type="text" id="businessName" placeholder="نام کسب‌وکار">
-        <input type="text" id="initialCash" class="input-number" placeholder="بازآورده اولیه" oninput="formatInput(this)">
+        <input type="text" id="initialCash" class="input-number" placeholder="سرمایه اولیه " oninput="formatInput(this)">
         <input type="text" id="currencyunit" placeholder="واحد پول کسب و کار را وارد کنید">
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
@@ -251,6 +251,7 @@ button:hover {
     <script>
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
+        console.log(businesses);
         const parseDate = (dateString) => {
             return new Date(dateString);
         };        
@@ -304,7 +305,7 @@ button:hover {
             const descriptionInput = document.getElementById(`transaction-description-${index}`);
             const dateInput = document.getElementById(`transaction-date-${index}`);
         
-            const amount = parseFloat(amountInput.value.replace(/,/g, ''));
+            let  amount = parseFloat(amountInput.value.replace(/,/g, ''));
             const description = descriptionInput.value.trim();
             // اگر فیلد زمان مقدار داشته باشد، از آن استفاده می‌کنیم، در غیر این صورت زمان فعلی را می‌گیریم
             console.log("*****",dateInput.value);
@@ -313,7 +314,8 @@ button:hover {
             const date = dateInput.value ? new Date(convertJalaliToGregorian(convertPersianToEnglish(dateInput.value))) : new Date();
         
             if (!isNaN(amount) && amount > 0 && description) {
-                businesses[index].cash += type === 'profit' ? amount : -amount;
+                //businesses[index].cash += type === 'profit' ? amount : -amount;
+                amount = type === 'profit' ? amount : -amount;
                 businesses[index].transactions.push({ 
                     type, 
                     amount, 
@@ -382,10 +384,11 @@ button:hover {
                 });
                 const initialDate = new persianDate().format('YYYY/MM/DD');
                 const div = document.createElement('div');
+                const totalAmount = business.transactions.reduce((sum, transaction) => sum + transaction.amount, business.cash);
                 div.classList.add('business');
                 div.innerHTML = `
                     <h3>${business.name}</h3>
-                    <p>موجودی: ${formatNumber(business.cash)} ${business.currencyunit}</p>
+                    <p>موجودی: ${formatNumber(totalAmount)} ${business.currencyunit}</p>
                     <div class="transaction-controls">
                         <input type="text" class="input-number" id="transaction-amount-${index}" placeholder="مقدار" oninput="formatInput(this)" />
                         <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
@@ -398,7 +401,7 @@ button:hover {
                     <h4>تراکنش‌ها:</h4>
                     <div class="transactions-list">
                         ${business.transactions.map(t => `
-                            <div class="log" data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
+                            <div class="log" data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.amount}, '${t.date}')">
                                 ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} ${business.currencyunit}
                                 | موجودی: ${formatNumber(t.balance)} ${business.currencyunit}
                                 | در ازای: ${t.description}
