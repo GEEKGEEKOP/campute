@@ -385,7 +385,7 @@ button:hover {
                 const initialDate = new persianDate().format('YYYY/MM/DD');
                 const div = document.createElement('div');
                 //const totalAmount = business.transactions.reduce((sum, transaction) => sum + transaction.amount, business.cash);
-
+                let bb=business.cash;
                 const now = new Date();
                 const totalAmount = business.transactions.reduce((sum, transaction) => {
                   const transactionDate = new Date(transaction.date);
@@ -424,7 +424,7 @@ button:hover {
         // مقایسه تاریخ تراکنش با تاریخ جاری
         const isFuture = transactionDate > new Date();
         //let bbbb=t.balance
-        business.cash += t.amount
+        bb += t.amount
         return `
             <div class="log" 
                  data-index="${business.transactions.indexOf(t)}" 
@@ -433,7 +433,7 @@ button:hover {
                  onclick="showCalculatedValue(${t.amount}, '${t.date}')"
                  style="background-color: ${isFuture ? 'yellow' : 'transparent'}">
                 ${transactionDate.toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} ${business.currencyunit}
-                | موجودی: ${formatNumber(business.cash)} ${business.currencyunit}
+                | موجودی: ${formatNumber(bb)} ${business.currencyunit}
                 | در ازای: ${t.description}
                 <button style="background:darkblue" onclick="event.stopPropagation(); deleteTransaction(${index}, this)">حذف تراکنش</button>
             </div>
