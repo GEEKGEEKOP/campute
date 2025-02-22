@@ -344,7 +344,13 @@ button:hover {
                 console.error("The input is not a valid number");
                 return;
             }
-
+            let prefix = "";
+            if (number < 0){
+                prefix="-";
+            }
+            if (number > 0){
+                prefix="+";
+            }
             let text = number.toString(); // تبدیل عدد به رشته
             let parts = text.split('.');
             let integerPart = parts[0];
@@ -356,7 +362,7 @@ button:hover {
             // جدا کردن هزارگان
             integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-            return integerPart + decimalPart;
+            return prefix + integerPart + decimalPart;
         }
 
         
@@ -372,7 +378,7 @@ button:hover {
                     <h3>${business.name}</h3>
                     <p>موجودی: ${formatNumber(business.cash)} ${business.currencyunit}</p>
                     <div class="transaction-controls">
-                        <input type="text" class="input-number" id="transaction-amount-${index}" placeholder="مقدار (تومان)" oninput="formatInput(this)" />
+                        <input type="text" class="input-number" id="transaction-amount-${index}" placeholder="مقدار" oninput="formatInput(this)" />
                         <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
                         <!-- تغییر نوع input به text -->
                         <input type="text" id="transaction-date-${index}" placeholder="انتخاب تاریخ" value="${initialDate}" />
