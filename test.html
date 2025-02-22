@@ -6,22 +6,45 @@
     <title>فرمت‌دهی عدد در تگ‌ها</title>
 </head>
 <body>
-    <p id="number1">155465</p>
-    <p id="number2">1234567.8945646546546</p>
-    <p id="number3">987654321</p>
 
     <script>
-        function formatNumber(element) {
-            let text = element.innerText;
-            let formattedNumber = text.replace(/[^\d.]/g, '')
-                                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            element.innerText = formattedNumber;
-        }
+        const data = [
+    {
+        type: "profit",
+        amount: 15,
+        description: "خریدریپلXRP",
+        date: "2/20/2025, 3:30:00 AM",
+        balance: 115
+    },
+    {
+        type: "loss",
+        amount: 5.5,
+        description: "ضرردرWETH",
+        date: "2/20/2025, 3:30:00 AM",
+        balance: 109.5
+    },
+    {
+        type: "loss",
+        amount: 150,
+        description: "ض",
+        date: "2/15/2025, 3:30:00 AM",
+        balance: -40.5
+    }
+];
 
-        // اعمال تابع روی تگ‌ها
-        formatNumber(document.getElementById('number1'));
-        formatNumber(document.getElementById('number2'));
-        formatNumber(document.getElementById('number3'));
+// تابع برای تبدیل تاریخ به فرمت قابل مقایسه
+const parseDate = (dateString) => {
+    return new Date(dateString);
+};
+
+// سورت کردن داده‌ها بر اساس تاریخ
+data.sort((a, b) => {
+    const dateA = parseDate(a.date);
+    const dateB = parseDate(b.date);
+    return dateA - dateB; // اگر تاریخ a کوچکتر از b باشد، ترتیب صعودی خواهد بود
+});
+
+console.log(data);
     </script>
 </body>
 </html>
