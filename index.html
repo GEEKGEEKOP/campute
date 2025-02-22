@@ -251,7 +251,10 @@ button:hover {
     <script>
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
-        
+        const parseDate = (dateString) => {
+            return new Date(dateString);
+        };        
+        ///////////////////////////*************************************************************///////////////////////
         function saveData() {
             localStorage.setItem('businesses', JSON.stringify(businesses));
         }
@@ -371,6 +374,12 @@ button:hover {
             list.innerHTML = '';
             businesses.forEach((business, index) => {
                 // استفاده از تاریخ شمسی به عنوان مقدار اولیه
+                console.log(business);
+                business.transactions.sort((a, b) => {
+                    const dateA = parseDate(a.date);
+                    const dateB = parseDate(b.date);
+                    return dateA - dateB; // اگر تاریخ a کوچکتر از b باشد، ترتیب صعودی خواهد بود
+                });
                 const initialDate = new persianDate().format('YYYY/MM/DD');
                 const div = document.createElement('div');
                 div.classList.add('business');
