@@ -401,11 +401,24 @@ button:hover {
                     <h4>تراکنش‌ها:</h4>
                     <div class="transactions-list">
                         ${business.transactions.map(t => `
-                            <div class="log" data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.amount}, '${t.date}')">
-                                ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} ${business.currencyunit}
-                                | موجودی: ${formatNumber(t.balance)} ${business.currencyunit}
-                                | در ازای: ${t.description}
-                            </div>
+
+
+        <div class="log" 
+             data-index="${business.transactions.indexOf(t)}" 
+             data-balance="${t.balance}" 
+             data-date="${t.date}" 
+             onclick="showCalculatedValue(${t.amount}, '${t.date}')">
+            ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} ${business.currencyunit}
+            | موجودی: ${formatNumber(t.balance)} ${business.currencyunit}
+            | در ازای: ${t.description}
+            <button onclick="event.stopPropagation(); deleteTransaction(${index}, this)">حذف تراکنش</button>
+        </div>
+
+
+
+
+
+
                         `).join('')}
                     </div>
                     <canvas id="chart-${index}"></canvas>
@@ -421,6 +434,17 @@ button:hover {
             });
         }
 
+        function deleteTransaction(businessIndex, buttonElement) {
+            // پیدا کردن المان والد که حاوی اطلاعات تراکنش است
+            const transactionDiv = buttonElement.closest('.log');
+            // استخراج اندیس تراکنش از ویژگی داده data-index
+            const transactionIndex = parseInt(transactionDiv.getAttribute('data-index'));
+            // حذف تراکنش از آرایه
+            businesses[businessIndex].transactions.splice(transactionIndex, 1);
+            // به‌روزرسانی نمایش کسب‌وکارها
+            saveData();
+            renderBusinesses();
+        }
 
         
         
