@@ -384,7 +384,19 @@ button:hover {
                 });
                 const initialDate = new persianDate().format('YYYY/MM/DD');
                 const div = document.createElement('div');
-                const totalAmount = business.transactions.reduce((sum, transaction) => sum + transaction.amount, business.cash);
+                //const totalAmount = business.transactions.reduce((sum, transaction) => sum + transaction.amount, business.cash);
+
+                const now = new Date();
+                const totalAmount = business.transactions.reduce((sum, transaction) => {
+                  const transactionDate = new Date(transaction.date);
+                  if (transactionDate <= now) {
+                    return sum + transaction.amount;
+                  }
+                  return sum;
+                }, business.cash);
+
+
+
                 div.classList.add('business');
                 div.innerHTML = `
                     <h3>${business.name}</h3>
@@ -394,32 +406,47 @@ button:hover {
                         <input type="text" id="transaction-description-${index}" placeholder="توضیحات" />
                         <!-- تغییر نوع input به text -->
                         <input type="text" id="transaction-date-${index}" placeholder="انتخاب تاریخ" value="${initialDate}" />
-                        <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
-                        <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
+                        <button style="background: green;" onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
+                        <button style="background: red;" onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
                     </div>
-                    <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
+                    <button class="delete-btn" style="background:darkorange" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
                     <div class="transactions-list">
-                        ${business.transactions.map(t => `
-
-
-        <div class="log" 
-             data-index="${business.transactions.indexOf(t)}" 
-             data-balance="${t.balance}" 
-             data-date="${t.date}" 
-             onclick="showCalculatedValue(${t.amount}, '${t.date}')">
-            ${new Date(t.date).toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} ${business.currencyunit}
-            | موجودی: ${formatNumber(t.balance)} ${business.currencyunit}
-            | در ازای: ${t.description}
-            <button onclick="event.stopPropagation(); deleteTransaction(${index}, this)">حذف تراکنش</button>
-        </div>
 
 
 
 
 
 
-                        `).join('')}
+    ${business.transactions.map(t => {
+        // تبدیل تاریخ تراکنش به شیء Date
+        const transactionDate = new Date(t.date);
+        // مقایسه تاریخ تراکنش با تاریخ جاری
+        const isFuture = transactionDate > new Date();
+        //let bbbb=t.balance
+        business.cash += t.amount
+        return `
+            <div class="log" 
+                 data-index="${business.transactions.indexOf(t)}" 
+                 data-balance="${t.balance}" 
+                 data-date="${t.date}" 
+                 onclick="showCalculatedValue(${t.amount}, '${t.date}')"
+                 style="background-color: ${isFuture ? 'yellow' : 'transparent'}">
+                ${transactionDate.toLocaleDateString('fa-IR')} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} ${business.currencyunit}
+                | موجودی: ${formatNumber(business.cash)} ${business.currencyunit}
+                | در ازای: ${t.description}
+                <button style="background:darkblue" onclick="event.stopPropagation(); deleteTransaction(${index}, this)">حذف تراکنش</button>
+            </div>
+        `;
+    }).join('')}
+
+
+
+
+
+
+
+
                     </div>
                     <canvas id="chart-${index}"></canvas>
                 `;
