@@ -444,6 +444,7 @@ button:hover {
 
 
 
+<div id="calendarContainer"></div>
 
 
 
@@ -459,6 +460,10 @@ button:hover {
                     format: 'YYYY/MM/DD',
                     initialValue: true,
                     autoClose: true
+                });
+                MyCalendar.init({
+                    containerId: "calendarContainer",
+                    events: business.transactions 
                 });
             });
         }
