@@ -99,7 +99,8 @@
         cell.classList.add("marked");
         cell.onclick = () => {
           var eventsText = eventsForDay.map(event => `- ${event.description}`).join("\n");
-          showPopup(formattedDate, eventsText);
+          console.log(eventData);
+          showPopup(formattedDate, eventsForDay);
         };
       }
 
@@ -115,7 +116,7 @@
   function showPopup(date, eventsText) {
     var popup = document.createElement("div");
     popup.classList.add("popup");
-
+    console.log(eventsText);
     var content = document.createElement("div");
     content.classList.add("popup-content");
     content.innerHTML = `<h3>رویدادها برای تاریخ ${date}</h3><pre>${eventsText}</pre>`;
@@ -170,7 +171,7 @@
     injectStyles();
     generateCalendar(currentYear, currentMonth);
   };
-
+console.log(eventData);
   window.MyCalendar = MyCalendar;
 })();
 
