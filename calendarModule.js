@@ -90,10 +90,13 @@
       cell.innerText = day;
       var formattedDate = `${year}/${month < 10 ? "0" + month : month}/${day < 10 ? "0" + day : day}`;
 
-      var event = eventData.find(e => e.jalaaliDate === formattedDate);
-      if (event) {
+      var eventsForDay = eventData.filter(e => e.jalaaliDate === formattedDate);
+      if (eventsForDay.length > 0) {
         cell.classList.add("marked");
-        cell.onclick = () => alert(`رویداد: ${event.description}\nتاریخ: ${formattedDate}`);
+        cell.onclick = () => {
+          var eventsText = eventsForDay.map(event => `- ${event.description}`).join("\n");
+          alert(`رویدادها برای تاریخ ${formattedDate}:\n\n${eventsText}`);
+        };
       }
 
       row.appendChild(cell);
