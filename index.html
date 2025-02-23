@@ -237,6 +237,72 @@ button:hover {
     font-size: 14px;
 }
 */
+
+    #calendarContainer {
+      width: 300px;
+      margin: 20px auto;
+      text-align: center;
+    }
+    #monthYear {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    #calendar {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #calendar th, #calendar td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      height: 40px;
+      vertical-align: middle;
+    }
+    #calendar th {
+      background: #f2f2f2;
+    }
+    /* استایل روزهای علامت‌گذاری شده */
+    .marked {
+      background: #ffeb3b;
+      cursor: pointer;
+    }
+    /* استایل روز امروز */
+    .today {
+      border: 2px solid red;
+    }
+    /* استایل modal */
+    #modalOverlay {
+      display: none;
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    #modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left:50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      z-index: 101;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    #modal button {
+      margin-top: 10px;
+    }
+    /* استایل دکمه‌های ناوبری */
+    .nav-buttons {
+      margin: 10px 0;
+    }
+    .nav-buttons button {
+      margin: 0 5px;
+      padding: 5px 10px;
+    }
     </style>
 </head>
 <body>
@@ -248,6 +314,12 @@ button:hover {
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
         <div id="businessList"></div>
     </div>
+  <!-- overlay و modal برای نمایش اطلاعات -->
+  <div id="modalOverlay"></div>
+  <div id="modal">
+    <p id="modalContent"></p>
+    <button onclick="closeModal()">بستن</button>
+  </div>
     <script>
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
@@ -443,13 +515,40 @@ button:hover {
 
 
 
+  <div id="calendarContainer">
+    <!-- دکمه‌های ناوبری برای تغییر ماه و سال -->
+    <div class="nav-buttons">
+      <button onclick="previousYear()">سال قبل</button>
+      <button onclick="previousMonth()">ماه قبل</button>
+      <button onclick="nextMonth()">ماه بعد</button>
+      <button onclick="nextYear()">سال بعد</button>
+    </div>
+    <h2 id="monthYear"></h2>
+    <table id="calendar">
+      <thead>
+        <tr>
+          <th>ش</th> <!-- شنبه -->
+          <th>ی</th> <!-- یکشنبه -->
+          <th>د</th> <!-- دوشنبه -->
+          <th>س</th> <!-- سه‌شنبه -->
+          <th>چ</th> <!-- چهارشنبه -->
+          <th>پ</th> <!-- پنجشنبه -->
+          <th>ج</th> <!-- جمعه -->
+        </tr>
+      </thead>
+      <tbody id="calendarBody">
+      </tbody>
+    </table>
+  </div>
+
+
 
 
 
 
 
                     </div>
-                    <canvas id="chart-${index}"></canvas>
+                    
                 `;
                 list.appendChild(div);
         
@@ -459,6 +558,75 @@ button:hover {
                     initialValue: true,
                     autoClose: true
                 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    let events = business.transactions;
+// تبدیل تاریخ میلادی به تاریخ جلالی
+const convertToJalaali = (dateString) => {
+  const dateObj = new Date(dateString);
+  const jalaaliDate = jalaali.toJalaali(dateObj.getFullYear(), dateObj.getMonth() + 1, dateObj.getDate());
+  return `${jalaaliDate.jy}/${jalaaliDate.jm < 10 ? "0" + jalaaliDate.jm : jalaaliDate.jm}/${jalaaliDate.jd < 10 ? "0" + jalaaliDate.jd : jalaaliDate.jd}`;
+};
+
+// تبدیل تمامی تاریخ‌ها
+events = events.map(event => {
+  return {
+    description: event.description,
+    date: convertToJalaali(event.date)
+  };
+});
+
+const markedDates = events.map(event => event.date.split(",")[0]); // حذف ساعت از تاریخ
+const des = events.map(event => event.description);
+
+console.log("**************************************",currentYear, currentMonth,markedDates,des);
+
+
+
+
+
+    // تولید تقویم در بارگذاری صفحه
+ 
+      generateCalendar(currentYear, currentMonth,markedDates,des);
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             });
         }
 
@@ -481,93 +649,192 @@ button:hover {
             chartElement.scrollIntoView({ behavior: 'smooth' });
         }
 
-        ///////////////////////////////////////////
-        // let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
 
-        // function saveData() {
-        //     localStorage.setItem('businesses', JSON.stringify(businesses));
-        // }
 
-        // function formatInput(input) {
-        //     let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
-        //     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
-        //     input.value = value;
-        // }
 
-        // function addBusiness() {
-        //     const name = document.getElementById('businessName').value;
-        //     const cash = parseFloat(document.getElementById('initialCash').value.replace(/,/g, '')); // حذف ویرگول‌ها برای تبدیل به عدد
-        //     if (name && !isNaN(cash)) {
-        //         businesses.push({ name, cash, transactions: [] });
-        //         saveData();
-        //         renderBusinesses();
-        //         document.getElementById('businessName').value = '';
-        //         document.getElementById('initialCash').value = '';
-        //     }
-        // }
 
-        // function addTransaction(index, type) {
-        //     const amount = parseFloat(prompt(`مقدار ${type === 'profit' ? 'سود' : 'ضرر'} را وارد کنید:`));
-        //     if (!isNaN(amount) && amount > 0) {
-        //         const description = prompt(`در ازای چه کاری ${type === 'profit' ? 'سود' : 'ضرر'} را وارد می‌کنید؟`);
-        //         const date = new Date();
-        //         businesses[index].cash += type === 'profit' ? amount : -amount;
-        //         businesses[index].transactions.push({ type, amount, description, date, balance: businesses[index].cash });
-        //         saveData();
-        //         renderBusinesses();
-        //         scrollToBusiness(index);
-        //     }
-        // }
 
-        // function deleteBusiness(index) {
-        //     if (confirm("آیا مطمئن هستید که می‌خواهید این کسب‌وکار را حذف کنید؟")) {
-        //         businesses.splice(index, 1);
-        //         saveData();
-        //         renderBusinesses();
-        //     }
-        // }
 
-        // function formatNumber(number) {
-        //     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // فرمت فارسی برای اعداد
-        // }
 
-        // function renderBusinesses() {
-        //     const list = document.getElementById('businessList');
-        //     list.innerHTML = '';
-        //     businesses.forEach((business, index) => {
-        //         const div = document.createElement('div');
-        //         div.classList.add('business');
-        //         div.innerHTML = `
-        //             <h3>${business.name}</h3>
-        //             <p>موجودی: ${formatNumber(business.cash)} تومان</p>
-        //             <button onclick="addTransaction(${index}, 'profit')">افزودن سود</button>
-        //             <button onclick="addTransaction(${index}, 'loss')">افزودن ضرر</button>
-        //             <button class="delete-btn" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
-        //             <h4>تراکنش‌ها:</h4>
-        //             <div>
-        //                 ${business.transactions.map(t => `
-        //                     <div class='log' data-balance="${t.balance}" data-date="${t.date}" onclick="showCalculatedValue(${t.balance}, '${t.date}')">
-        //                         ${t.date} - ${t.type === 'profit' ? 'سود' : 'ضرر'}: ${formatNumber(t.amount)} تومان 
-        //                         | موجودی: ${formatNumber(t.balance)} تومان 
-        //                         | در ازای: ${t.description}
-        //                     </div>
-        //                 `).join('')}
-        //             </div>
-        //             <canvas id="chart-${index}"></canvas>
-        //         `;
-        //         list.appendChild(div);
-        //     });
-        // }
-        // function scrollToBusiness(index) {
-        //     const chartElement = document.getElementById(`chart-${index}`);
-        //     chartElement.scrollIntoView({ behavior: 'smooth' });
-        // }
 
-        //----------------------------------بی ناموس کار نمیکنه
-        // تبدیل تاریخ شمسی (مثلاً 1402/11/20) به میلادی
-  
-        
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const todayGregorian = new Date();
+    const todayJ = jalaali.toJalaali(
+      todayGregorian.getFullYear(),
+      todayGregorian.getMonth() + 1,
+      todayGregorian.getDate()
+    );
+    // استفاده از ماه و سال جاری شمسی
+    let currentYear = todayJ.jy;
+    let currentMonth = todayJ.jm; // ماه از 1 تا 12
+
+    // تابع ساخت تقویم برای ماه و سال مشخص
+    function generateCalendar(year, month,data,des) {
+      // تعیین تعداد روزهای ماه بر اساس ماه شمسی
+      let daysInMonth;
+      if (month <= 6) {
+        daysInMonth = 31;
+      } else if (month <= 11) {
+        daysInMonth = 30;
+      } else {
+        daysInMonth = jalaali.isLeapJalaaliYear(year) ? 30 : 29;
+      }
+      
+      // محاسبه روز هفته اولین روز ماه
+      const gDate = jalaali.toGregorian(year, month, 1);
+      const firstDayDate = new Date(gDate.gy, gDate.gm - 1, gDate.gd);
+      let jsDay = firstDayDate.getDay(); // 0 (یکشنبه) تا 6 (شنبه)
+      // تنظیم شروع هفته؛ در تقویم فارسی شنبه اولین روز هفته است:
+      let startIndex = (jsDay + 1) % 7;
+      
+      // پاکسازی تقویم قدیمی
+      const calendarBody = document.getElementById("calendarBody");
+      calendarBody.innerHTML = "";
+
+      // نمایش عنوان ماه و سال
+      document.getElementById("monthYear").innerText =
+        year + "/" + (month < 10 ? "0" + month : month);
+
+      let row = document.createElement("tr");
+      // ایجاد سلول‌های خالی برای روزهایی که قبل از اولین روز ماه هستند
+      for (let i = 0; i < startIndex; i++) {
+        let cell = document.createElement("td");
+        cell.innerText = "";
+        row.appendChild(cell);
+      }
+      // پر کردن سلول‌های روزهای ماه
+      for (let day = 1; day <= daysInMonth; day++) {
+        if (row.children.length === 7) {
+          calendarBody.appendChild(row);
+          row = document.createElement("tr");
+        }
+        let cell = document.createElement("td");
+        cell.innerText = day;
+        // فرمت‌دهی تاریخ به صورت "YYYY/MM/DD"
+        let dayString = day < 10 ? "0" + day : day;
+        let monthString = month < 10 ? "0" + month : month;
+        let dateStr = year + "/" + monthString + "/" + dayString;
+
+        // اگر تاریخ در آرایه markedDates وجود داشته باشد، هایلایت و کلیک اضافه می‌شود
+        if (data.includes(dateStr)) {
+          let index = data.indexOf(dateStr);
+          cell.classList.add("marked");
+          cell.onclick = function() {
+            openModal("رویداد ویژه برای تاریخ " + dateStr + "\n" + des[index]);
+          }
+        }
+
+        // مشخص کردن امروز (اگر تاریخ با تاریخ امروز مطابقت داشته باشد)
+        if (year === todayJ.jy && month === todayJ.jm && day === todayJ.jd) {
+          cell.classList.add("today");
+        }
+
+        row.appendChild(cell);
+      }
+      // پر کردن سلول‌های خالی انتهای ردیف (در صورت نیاز)
+      while (row.children.length < 7) {
+        let cell = document.createElement("td");
+        cell.innerText = "";
+        row.appendChild(cell);
+      }
+      calendarBody.appendChild(row);
+
+    }
+
+    // دکمه‌های ناوبری:
+    function previousMonth() {
+      currentMonth--;
+      if (currentMonth < 1) {
+        currentMonth = 12;
+        currentYear--;
+      }
+      //generateCalendar(currentYear, currentMonth,);
+      renderBusinesses();
+    }
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 12) {
+        currentMonth = 1;
+      }
+      //generateCalendar(currentYear, currentMonth);
+      renderBusinesses();
+    }
+    function previousYear() {
+      currentYear--;
+      //generateCalendar(currentYear, currentMonth);
+      renderBusinesses();
+    }
+    function nextYear() {
+      currentYear++;
+      //generateCalendar(currentYear, currentMonth);
+      renderBusinesses();
+    }
+
+    // تابع برای دریافت آرایه تاریخ‌ها و هایلایت آن‌ها
+
+
+    // توابع نمایش و بستن modal
+    function openModal(content) {
+      document.getElementById("modalContent").innerText = content;
+      document.getElementById("modalOverlay").style.display = "block";
+      document.getElementById("modal").style.display = "block";
+    }
+    function closeModal() {
+      document.getElementById("modalOverlay").style.display = "none";
+      document.getElementById("modal").style.display = "none";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
         function getMonthDifference(date1, date2) {
             const d1 = new Date(date1);
