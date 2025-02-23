@@ -62,6 +62,10 @@
       #monthYear { margin-bottom: 10px; font-size: 1.2em; text-align: center; }
       #calendar th, #calendar td { border: 1px solid #ccc; padding: 10px; text-align: center; cursor: pointer; }
       .marked { background: #ffeb3b; }
+      .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 1px solid #ccc; padding: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); width: 300px; }
+      .popup .popup-content { margin-bottom: 10px; }
+      .popup button { padding: 5px 10px; background: #ff7043; color: white; border: none; cursor: pointer; }
+      .popup button:hover { background: #ff5722; }
     `;
     document.head.appendChild(style);
   }
@@ -95,7 +99,7 @@
         cell.classList.add("marked");
         cell.onclick = () => {
           var eventsText = eventsForDay.map(event => `- ${event.description}`).join("\n");
-          alert(`رویدادها برای تاریخ ${formattedDate}:\n\n${eventsText}`);
+          showPopup(formattedDate, eventsText);
         };
       }
 
@@ -106,6 +110,27 @@
       row.appendChild(document.createElement("td"));
     }
     calendarBody.appendChild(row);
+  }
+
+  function showPopup(date, eventsText) {
+    var popup = document.createElement("div");
+    popup.classList.add("popup");
+
+    var content = document.createElement("div");
+    content.classList.add("popup-content");
+    content.innerHTML = `<h3>رویدادها برای تاریخ ${date}</h3><pre>${eventsText}</pre>`;
+    
+    var closeButton = document.createElement("button");
+    closeButton.innerText = "بستن";
+    closeButton.onclick = function() {
+      popup.style.display = "none";
+    };
+
+    popup.appendChild(content);
+    popup.appendChild(closeButton);
+
+    document.body.appendChild(popup);
+    popup.style.display = "block";
   }
 
   function previousMonth() {
