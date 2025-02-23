@@ -111,8 +111,46 @@
   <script src="https://unpkg.com/jalaali-js/dist/jalaali.min.js"></script>
   <script>
     // آرایه تاریخ‌های علامت‌گذاری شده (به فرمت "YYYY/MM/DD")
-    let markedDates = ["1403/01/15", "1403/01/20", "1403/01/25"];
+    let events = [
+      {
+        "description": "خرید دوره",
+        "date": "2/19/2025, 3:30:00 AM",
+      },
+      {
+        "description": "پروژه",
+        "date": "2/20/2025, 3:30:00 AM",
+      },
+      {
+        "description": "خرید لب تاپ",
+        "date": "2/21/2025, 3:30:00 AM",
+      },
+      {
+        "description": "چک آقای موسوی",
+        "date": "3/17/2025, 3:30:00 AM",
+      },
+      {
+        "description": "فروش محصول",
+        "date": "2/4/2025, 3:30:00 AM",
+      }
+    ];
+// تبدیل تاریخ میلادی به تاریخ جلالی
+const convertToJalaali = (dateString) => {
+  const dateObj = new Date(dateString);
+  const jalaaliDate = jalaali.toJalaali(dateObj.getFullYear(), dateObj.getMonth() + 1, dateObj.getDate());
+  return `${jalaaliDate.jy}/${jalaaliDate.jm < 10 ? "0" + jalaaliDate.jm : jalaaliDate.jm}/${jalaaliDate.jd < 10 ? "0" + jalaaliDate.jd : jalaaliDate.jd}`;
+};
 
+// تبدیل تمامی تاریخ‌ها
+events = events.map(event => {
+  return {
+    description: event.description,
+    date: convertToJalaali(event.date)
+  };
+});
+
+const markedDates = events.map(event => event.date.split(",")[0]); // حذف ساعت از تاریخ
+const des = events.map(event => event.description);
+console.log(markedDates);
     // گرفتن تاریخ امروز میلادی و تبدیل به شمسی
     const todayGregorian = new Date();
     const todayJ = jalaali.toJalaali(
@@ -173,9 +211,10 @@
 
         // اگر تاریخ در آرایه markedDates وجود داشته باشد، هایلایت و کلیک اضافه می‌شود
         if (markedDates.includes(dateStr)) {
+          let index = markedDates.indexOf(dateStr);
           cell.classList.add("marked");
           cell.onclick = function() {
-            openModal("رویداد ویژه برای تاریخ " + dateStr);
+            openModal("رویداد ویژه برای تاریخ " + dateStr + "\n" + des[index]);
           }
         }
 
