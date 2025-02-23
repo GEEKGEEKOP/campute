@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>تقویم فارسی سفارشی</title>
+  <title>تقویم فارسی با ناوبری</title>
   <style>
     /* استایل تقویم */
     #calendarContainer {
@@ -63,10 +63,25 @@
     #modal button {
       margin-top: 10px;
     }
+    /* استایل دکمه‌های ناوبری */
+    .nav-buttons {
+      margin: 10px 0;
+    }
+    .nav-buttons button {
+      margin: 0 5px;
+      padding: 5px 10px;
+    }
   </style>
 </head>
 <body>
   <div id="calendarContainer">
+    <!-- دکمه‌های ناوبری برای تغییر ماه و سال -->
+    <div class="nav-buttons">
+      <button onclick="previousYear()">سال قبل</button>
+      <button onclick="previousMonth()">ماه قبل</button>
+      <button onclick="nextMonth()">ماه بعد</button>
+      <button onclick="nextYear()">سال بعد</button>
+    </div>
     <h2 id="monthYear"></h2>
     <table id="calendar">
       <thead>
@@ -92,20 +107,11 @@
     <button onclick="closeModal()">بستن</button>
   </div>
 
-<script src="https://unpkg.com/jalaali-js/dist/jalaali.min.js"></script>
-  <!-- افزودن jalaali-js از jsDelivr (در صورت نامعتبر بودن CDN، می‌توانید فایل را به صورت محلی بارگذاری کنید) -->
+  <!-- استفاده از jalaali-js از CDN unpkg -->
+  <script src="https://unpkg.com/jalaali-js/dist/jalaali.min.js"></script>
   <script>
-    /*
-      در این اسکریپت:
-      - با استفاده از jalaali-js تاریخ میلادی کنونی به شمسی تبدیل می‌شود.
-      - تقویم ماه جاری (سال و ماه شمسی) ساخته شده و تعداد روزهای ماه بر اساس ماه و سال شمسی محاسبه می‌شود.
-      - تاریخ شروع ماه (اولین روز ماه) با تبدیل به تاریخ میلادی و بررسی روز هفته محاسبه می‌شود.
-      - تاریخ‌هایی که در آرایه markedDates تعریف شده‌اند با کلاس "marked" مشخص شده و رویداد کلیک به آن‌ها اضافه می‌شود.
-      - در صورت تطابق تاریخ امروز نیز با کلاس "today" مشخص می‌شود.
-    */
-    
     // آرایه تاریخ‌های علامت‌گذاری شده (به فرمت "YYYY/MM/DD")
-    const markedDates = ["1403/01/15", "1403/01/20", "1403/01/25"];
+    let markedDates = ["1403/01/15", "1403/01/20", "1403/01/25"];
 
     // گرفتن تاریخ امروز میلادی و تبدیل به شمسی
     const todayGregorian = new Date();
@@ -118,6 +124,7 @@
     let currentYear = todayJ.jy;
     let currentMonth = todayJ.jm; // ماه از 1 تا 12
 
+    // تابع ساخت تقویم برای ماه و سال مشخص
     function generateCalendar(year, month) {
       // تعیین تعداد روزهای ماه بر اساس ماه شمسی
       let daysInMonth;
@@ -130,13 +137,11 @@
       }
       
       // محاسبه روز هفته اولین روز ماه
-      // تبدیل تاریخ شمسی (year, month, 1) به میلادی
       const gDate = jalaali.toGregorian(year, month, 1);
       const firstDayDate = new Date(gDate.gy, gDate.gm - 1, gDate.gd);
-      // در جاوااسکریپت: 0 = یکشنبه، 6 = شنبه
-      // چون در تقویم فارسی، شنبه اولین روز هفته است، باید تنظیم کنیم:
       let jsDay = firstDayDate.getDay(); // 0 (یکشنبه) تا 6 (شنبه)
-      let startIndex = (jsDay + 1) % 7; // اگر jsDay=6 (شنبه) → startIndex=0
+      // تنظیم شروع هفته؛ در تقویم فارسی شنبه اولین روز هفته است:
+      let startIndex = (jsDay + 1) % 7;
       
       // پاکسازی تقویم قدیمی
       const calendarBody = document.getElementById("calendarBody");
@@ -166,7 +171,7 @@
         let monthString = month < 10 ? "0" + month : month;
         let dateStr = year + "/" + monthString + "/" + dayString;
 
-        // علامت‌گذاری تاریخ‌های موجود در آرایه markedDates
+        // اگر تاریخ در آرایه markedDates وجود داشته باشد، هایلایت و کلیک اضافه می‌شود
         if (markedDates.includes(dateStr)) {
           cell.classList.add("marked");
           cell.onclick = function() {
@@ -190,7 +195,39 @@
       calendarBody.appendChild(row);
     }
 
-    // تابع نمایش modal با محتوا
+    // دکمه‌های ناوبری:
+    function previousMonth() {
+      currentMonth--;
+      if (currentMonth < 1) {
+        currentMonth = 12;
+        currentYear--;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 12) {
+        currentMonth = 1;
+        currentYear++;
+      }
+      generateCalendar(currentYear, currentMonth);
+    }
+    function previousYear() {
+      currentYear--;
+      generateCalendar(currentYear, currentMonth);
+    }
+    function nextYear() {
+      currentYear++;
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    // تابع برای دریافت آرایه تاریخ‌ها و هایلایت آن‌ها
+    function highlightDates(datesArray) {
+      markedDates = datesArray;
+      generateCalendar(currentYear, currentMonth);
+    }
+
+    // توابع نمایش و بستن modal
     function openModal(content) {
       document.getElementById("modalContent").innerText = content;
       document.getElementById("modalOverlay").style.display = "block";
