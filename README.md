@@ -1,6 +1,6 @@
 #TASKS
 
-Create a plan clender for manage transaction.
+Create a plan clender for manage transaction. |--/                       | F
 
 Fix Error in console browser.
 
