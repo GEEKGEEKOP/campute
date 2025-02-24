@@ -263,7 +263,11 @@ button:hover {
     }
     /* استایل روزهای علامت‌گذاری شده */
     .marked {
-      background: #ffeb3b;
+      background: #4CAF50;
+      cursor: pointer;
+    }
+    .mark {
+      background: #F44336;
       cursor: pointer;
     }
     /* استایل روز امروز */
@@ -733,7 +737,14 @@ console.log("**************************************",currentYear, currentMonth,m
         // اگر تاریخ در آرایه markedDates وجود داشته باشد، هایلایت و کلیک اضافه می‌شود
         if (data.includes(dateStr)) {
           let index = data.indexOf(dateStr);
-          cell.classList.add("marked");
+          //cell.classList.add("marked");
+          let status = checkFutureDate(dateStr);
+          if (status){
+            cell.classList.add("mark"); 
+          }
+          else{
+            cell.classList.add("marked"); 
+          }
           cell.onclick = function() {
             openModal("رویداد ویژه برای تاریخ " + dateStr + "\n" + des[index]);
           }
@@ -816,8 +827,25 @@ console.log("**************************************",currentYear, currentMonth,m
 
 
 
-
-
+    function checkFutureDate(jalaliDateStr) {
+      // تبدیل رشته تاریخ شمسی به شیء moment با فرمت جلالی
+      var date = moment(jalaliDateStr, 'jYYYY/jMM/jDD');
+      
+      // اعتبارسنجی تاریخ ورودی
+      if (!date.isValid()) {
+        console.log("تاریخ وارد شده معتبر نیست.");
+        return;
+      }
+      
+      // مقایسه تاریخ تبدیل‌شده با تاریخ فعلی
+      if (date.isAfter(moment())) {
+        console.log("تاریخ داده شده در آینده است.");
+        return true;
+      } else {
+        console.log("تاریخ داده شده در آینده نیست.");
+        return false;
+      }
+    }
 
 
 
