@@ -740,6 +740,7 @@ console.log("**************************************",currentYear, currentMonth,m
           //cell.classList.add("marked");
           let status = checkFutureDate(dateStr);
           if (status){
+            showNotification("صورت حساب های آینده :" + dateStr + "\n" + des[index]);
             cell.classList.add("mark"); 
           }
           else{
@@ -852,7 +853,32 @@ console.log("**************************************",currentYear, currentMonth,m
 
 
 
+    function showNotification(message = '🔔 یک اعلان جدید دارید!') {
+      // بررسی پشتیبانی مرورگر از Notification API
+      if (!('Notification' in window)) {
+        console.error('مرورگر شما از نوتیفیکیشن پشتیبانی نمیکند!');
+        return;
+      }
 
+      // بررسی مجوزهای دسترسی
+      if (Notification.permission === 'granted') {
+        // اگر مجوز داده شده، مستقیماً نوتیفیکیشن را نشان بده
+        new Notification('اعلان جدید :', {
+          body: message,
+          icon: 'asset/notification-icon.png' // آدرس آیکون اختیاری
+        });
+      } else if (Notification.permission !== 'denied') {
+        // اگر مجوز رد نشده، درخواست مجوز کنیم
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            new Notification('اعلان سیستم', {
+              body: message,
+              icon: '/notification-icon.png'
+            });
+          }
+        });
+      }
+}
 
 
 
