@@ -734,6 +734,7 @@ console.log("**************************************",currentYear, currentMonth,m
         if (data.includes(dateStr)) {
           let index = data.indexOf(dateStr);
           cell.classList.add("marked");
+          checkFutureDate(dateStr);
           cell.onclick = function() {
             openModal("رویداد ویژه برای تاریخ " + dateStr + "\n" + des[index]);
           }
@@ -816,8 +817,23 @@ console.log("**************************************",currentYear, currentMonth,m
 
 
 
-
-
+    function checkFutureDate(jalaliDateStr) {
+      // تبدیل رشته تاریخ شمسی به شیء moment با فرمت جلالی
+      var date = moment(jalaliDateStr, 'jYYYY/jMM/jDD');
+      
+      // اعتبارسنجی تاریخ ورودی
+      if (!date.isValid()) {
+        console.log("تاریخ وارد شده معتبر نیست.");
+        return;
+      }
+      
+      // مقایسه تاریخ تبدیل‌شده با تاریخ فعلی
+      if (date.isAfter(moment())) {
+        console.log("تاریخ داده شده در آینده است.");
+      } else {
+        console.log("تاریخ داده شده در آینده نیست.");
+      }
+    }
 
 
 
