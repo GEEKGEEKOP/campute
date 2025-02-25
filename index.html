@@ -10,7 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/persian-date@latest/dist/persian-date.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker-custom.css">
     <!--<script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0/dist/jalaali.min.js"></script>-->
     <script src="https://unpkg.com/jalaali-js/dist/jalaali.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
@@ -19,9 +18,15 @@
     <style>
 /* استایل‌های کلی صفحه */
 
+:root {
+    direction: rtl;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+}
+
+
 body {
     font-family: 'Tajawal', Arial, sans-serif;
-    direction: rtl;
     text-align: right;
     background: linear-gradient(135deg, #ece9e6, #ffffff);
     margin: 0;
@@ -132,7 +137,6 @@ button:hover {
 }
 
 
-
 /*
 body {
     font-family: Arial, sans-serif;
@@ -237,7 +241,6 @@ button:hover {
     font-size: 14px;
 }
 */
-
     #calendarContainer {
       width: 300px;
       margin: 20px auto;
