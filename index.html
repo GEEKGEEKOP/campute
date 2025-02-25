@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/css/persian-datepicker.min.css">
-    <!--<script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali-js.min.js"></script>-->
-    <!-- Persian Datepicker CSS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/persian-date@latest/dist/persian-date.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
-    <!--<script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.1.0/dist/jalaali.min.js"></script>-->
     <script src="https://unpkg.com/jalaali-js/dist/jalaali.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
@@ -134,31 +131,6 @@ button:hover {
     font-size: 15px;
     font-weight: bold;
     border-left: 4px solid #007bff;
-}
-
-
-/*
-body {
-    font-family: Arial, sans-serif;
-    direction: rtl;
-    text-align: right;
-    background: #f4f4f4;
-}
-
-.container {
-    width: 90%;
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
 }
 
 /* استایل ورودی‌ها */
@@ -338,13 +310,6 @@ button:hover {
         function saveData() {
             localStorage.setItem('businesses', JSON.stringify(businesses));
         }
-/*        
-        function formatInput(input) {
-            let value = input.value.replace(/[^\d]/g, '');  // حذف تمام کاراکترهای غیر عددی
-            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // اضافه کردن ویرگول هر سه رقم
-            input.value = value;
-        }
-*/
         function formatInput(input) {
             // جدا کردن بخش صحیح و اعشاری
             let parts = input.value.split('.');
@@ -417,11 +382,6 @@ button:hover {
                 renderBusinesses();
             }
         }
-       /* 
-        function formatNumber(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
-        }
-        */
         function formatNumber(number) {
             // ابتدا اطمینان حاصل می‌کنیم که ورودی یک عدد است
             if (isNaN(number)) {
@@ -448,8 +408,6 @@ button:hover {
 
             return prefix + integerPart + decimalPart;
         }
-
-        
         function renderBusinesses() {
             const list = document.getElementById('businessList');
             list.innerHTML = '';
@@ -473,9 +431,6 @@ button:hover {
                   }
                   return sum;
                 }, business.cash);
-
-
-
                 div.classList.add('business');
                 div.innerHTML = `
                     <h3>${business.name}</h3>
@@ -492,12 +447,6 @@ button:hover {
                     <button class="delete-btn" style="background:darkorange" onclick="deleteBusiness(${index})">حذف کسب‌وکار</button>
                     <h4>تراکنش‌ها:</h4>
                     <div class="transactions-list">
-
-
-
-
-
-
     ${business.transactions.map(t => {
         // تبدیل تاریخ تراکنش به شیء Date
         const transactionDate = new Date(t.date);
@@ -519,9 +468,6 @@ button:hover {
             </div>
         `;
     }).join('')}
-
-
-
   <div id="calendarContainer">
     <!-- دکمه‌های ناوبری برای تغییر ماه و سال -->
     <div class="nav-buttons">
@@ -547,15 +493,7 @@ button:hover {
       </tbody>
     </table>
   </div>
-
-
-
-
-
-
-
-                    </div>
-                    
+                    </div>     
                 `;
                 list.appendChild(div);
         
@@ -565,26 +503,6 @@ button:hover {
                     initialValue: true,
                     autoClose: true
                 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     let events = business.transactions;
 // تبدیل تاریخ میلادی به تاریخ جلالی
 const convertToJalaali = (dateString) => {
@@ -600,43 +518,13 @@ events = events.map(event => {
     date: convertToJalaali(event.date)
   };
 });
-
 const markedDates = events.map(event => event.date.split(",")[0]); // حذف ساعت از تاریخ
 const des = events.map(event => event.description);
-
 console.log("**************************************",currentYear, currentMonth,markedDates,des);
-
-
-
-
-
     // تولید تقویم در بارگذاری صفحه
- 
       generateCalendar(currentYear, currentMonth,markedDates,des);
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             });
         }
-
         function deleteTransaction(businessIndex, buttonElement) {
             // پیدا کردن المان والد که حاوی اطلاعات تراکنش است
             const transactionDiv = buttonElement.closest('.log');
@@ -648,38 +536,10 @@ console.log("**************************************",currentYear, currentMonth,m
             saveData();
             renderBusinesses();
         }
-
-        
-        
         function scrollToBusiness(index) {
             const chartElement = document.getElementById(`chart-${index}`);
             chartElement.scrollIntoView({ behavior: 'smooth' });
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const todayGregorian = new Date();
     const todayJ = jalaali.toJalaali(
       todayGregorian.getFullYear(),
@@ -813,24 +673,6 @@ console.log("**************************************",currentYear, currentMonth,m
       document.getElementById("modalOverlay").style.display = "none";
       document.getElementById("modal").style.display = "none";
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function checkFutureDate(jalaliDateStr) {
       // تبدیل رشته تاریخ شمسی به شیء moment با فرمت جلالی
       var date = moment(jalaliDateStr, 'jYYYY/jMM/jDD');
@@ -850,12 +692,6 @@ console.log("**************************************",currentYear, currentMonth,m
         return false;
       }
     }
-
-
-
-
-
-
     function showNotification(message = '🔔 یک اعلان جدید دارید!') {
       // بررسی پشتیبانی مرورگر از Notification API
       if (!('Notification' in window)) {
@@ -882,17 +718,6 @@ console.log("**************************************",currentYear, currentMonth,m
         });
       }
 }
-
-
-
-
-
-
-
-
-
-
-        
         function getMonthDifference(date1, date2) {
             const d1 = new Date(date1);
             const d2 = new Date(date2);
@@ -902,8 +727,6 @@ console.log("**************************************",currentYear, currentMonth,m
 
             return yearDiff * 12 + monthDiff;
         }
-        
-
         function getDayDifference(date1, date2) {
             const d1 = new Date(date1);
             const d2 = new Date(date2);
@@ -911,11 +734,6 @@ console.log("**************************************",currentYear, currentMonth,m
             const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24)); // تبدیل میلی‌ثانیه به روز
             return diffDays;
         }
-
-
-
-
-
         //  Doneپروژه فردا شب
 
         function calculateValue(balance, transactionDate) {
@@ -949,8 +767,6 @@ console.log("**************************************",currentYear, currentMonth,m
             let value = calculateValue(balance, transactionDate);
             alert(`مقدار محاسبه شده: ${value} تومان`);
         }
-
-        
         // اضافه کردن کلیک به لاگ‌ها
         document.addEventListener('DOMContentLoaded', function() {
             let executed = false;
@@ -959,13 +775,9 @@ console.log("**************************************",currentYear, currentMonth,m
                               executed = true; // علامت می‌زنیم که تابع اجرا شده است
                               let balance = parseFloat(this.getAttribute('data-balance'));
                               let date = this.getAttribute('data-date');
-                              showCalculatedValue(balance, date); 
-                                        
+                              showCalculatedValue(balance, date);                      
             });
         });
-        // Doneپروژه فردا شب
-
-
         renderBusinesses();
     </script>
 </body>
