@@ -285,6 +285,31 @@ button:hover {
     </style>
 </head>
 <body>
+  <div id="calendarContainer" class="container">
+    <!-- دکمه‌های ناوبری برای تغییر ماه و سال -->
+    <div class="nav-buttons">
+      <button onclick="previousYear()">سال قبل</button>
+      <button onclick="previousMonth()">ماه قبل</button>
+      <button onclick="nextMonth()">ماه بعد</button>
+      <button onclick="nextYear()">سال بعد</button>
+    </div>
+    <h2 id="monthYear"></h2>
+    <table id="calendar">
+      <thead>
+        <tr>
+          <th>ش</th> <!-- شنبه -->
+          <th>ی</th> <!-- یکشنبه -->
+          <th>د</th> <!-- دوشنبه -->
+          <th>س</th> <!-- سه‌شنبه -->
+          <th>چ</th> <!-- چهارشنبه -->
+          <th>پ</th> <!-- پنجشنبه -->
+          <th>ج</th> <!-- جمعه -->
+        </tr>
+      </thead>
+      <tbody id="calendarBody">
+      </tbody>
+    </table>
+  </div>
     <div class="container">
         <h2>مدیریت کسب‌وکارها</h2>
         <input type="text" id="businessName" placeholder="نام کسب‌وکار">
@@ -299,7 +324,12 @@ button:hover {
     <p id="modalContent"></p>
     <button onclick="closeModal()">بستن</button>
   </div>
+
+
+  
     <script>
+        let dates=[];
+        let dess=[];
         ////////////////////////////////////////////
         let businesses = JSON.parse(localStorage.getItem('businesses')) || [];
         console.log(businesses);
@@ -411,6 +441,7 @@ button:hover {
         function renderBusinesses() {
             const list = document.getElementById('businessList');
             list.innerHTML = '';
+            //let array1=[];
             businesses.forEach((business, index) => {
                 // استفاده از تاریخ شمسی به عنوان مقدار اولیه
                 console.log(business);
@@ -466,33 +497,9 @@ button:hover {
                 | در ازای: ${t.description}
                 <button style="background:darkblue" onclick="event.stopPropagation(); deleteTransaction(${index}, this)">حذف تراکنش</button>
             </div>
+            <spam id="spammm${index}">
         `;
     }).join('')}
-  <div id="calendarContainer">
-    <!-- دکمه‌های ناوبری برای تغییر ماه و سال -->
-    <div class="nav-buttons">
-      <button onclick="previousYear()">سال قبل</button>
-      <button onclick="previousMonth()">ماه قبل</button>
-      <button onclick="nextMonth()">ماه بعد</button>
-      <button onclick="nextYear()">سال بعد</button>
-    </div>
-    <h2 id="monthYear"></h2>
-    <table id="calendar">
-      <thead>
-        <tr>
-          <th>ش</th> <!-- شنبه -->
-          <th>ی</th> <!-- یکشنبه -->
-          <th>د</th> <!-- دوشنبه -->
-          <th>س</th> <!-- سه‌شنبه -->
-          <th>چ</th> <!-- چهارشنبه -->
-          <th>پ</th> <!-- پنجشنبه -->
-          <th>ج</th> <!-- جمعه -->
-        </tr>
-      </thead>
-      <tbody id="calendarBody">
-      </tbody>
-    </table>
-  </div>
                     </div>     
                 `;
                 list.appendChild(div);
@@ -521,8 +528,10 @@ events = events.map(event => {
 const markedDates = events.map(event => event.date.split(",")[0]); // حذف ساعت از تاریخ
 const des = events.map(event => event.description);
 console.log("**************************************",currentYear, currentMonth,markedDates,des);
+        dates.push(...markedDates);
+        dess.push(...des);
     // تولید تقویم در بارگذاری صفحه
-      generateCalendar(currentYear, currentMonth,markedDates,des);
+      //generateCalendar(currentYear, currentMonth,markedDates,des);
             });
         }
         function deleteTransaction(businessIndex, buttonElement) {
@@ -537,7 +546,7 @@ console.log("**************************************",currentYear, currentMonth,m
             renderBusinesses();
         }
         function scrollToBusiness(index) {
-            const chartElement = document.getElementById(`chart-${index}`);
+            const chartElement = document.getElementById(`spammm${index}`);
             chartElement.scrollIntoView({ behavior: 'smooth' });
         }
     const todayGregorian = new Date();
@@ -779,6 +788,8 @@ console.log("**************************************",currentYear, currentMonth,m
             });
         });
         renderBusinesses();
+        console.log("88888888888888888888888",dates,dess,"999999999999999999");
+        generateCalendar(currentYear, currentMonth,dates,dess); 
     </script>
 </body>
 </html>
