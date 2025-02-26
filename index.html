@@ -647,25 +647,26 @@ console.log("**************************************",currentYear, currentMonth,m
         currentMonth = 12;
         currentYear--;
       }
-      //generateCalendar(currentYear, currentMonth,);
+      generateCalendar(currentYear, currentMonth,dates,dess);  
       renderBusinesses();
     }
     function nextMonth() {
       currentMonth++;
       if (currentMonth > 12) {
         currentMonth = 1;
+          currentYear++;
       }
-      //generateCalendar(currentYear, currentMonth);
+      generateCalendar(currentYear, currentMonth,dates,dess);  
       renderBusinesses();
     }
     function previousYear() {
       currentYear--;
-      //generateCalendar(currentYear, currentMonth);
+      generateCalendar(currentYear, currentMonth,dates,dess);  
       renderBusinesses();
     }
     function nextYear() {
       currentYear++;
-      //generateCalendar(currentYear, currentMonth);
+      generateCalendar(currentYear, currentMonth,dates,dess);  
       renderBusinesses();
     }
 
