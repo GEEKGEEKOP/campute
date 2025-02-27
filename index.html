@@ -13,209 +13,132 @@
     <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
     <title>نرم‌افزار حسابداری</title>
     <style>
-/* استایل‌های کلی صفحه */
+    /* تعریف متغیرهای اصلی برای تم روشن */
+    :root {
+      direction: rtl;
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
 
-:root {
-    direction: rtl;
-    writing-mode: horizontal-tb;
-    text-orientation: mixed;
-}
+      --primary-bg: #ffffff;
+      --primary-text: #333;
+      --container-bg: #fff;
+      --input-bg: #f8f8f8;
+      --input-border: #ddd;
+      --button-bg: linear-gradient(135deg, #007bff, #0056b3);
+      --button-hover-bg: linear-gradient(135deg, #0056b3, #003f7f);
+    }
 
+    /* استایل‌های کلی صفحه */
+    body {
+      font-family: 'Tajawal', Arial, sans-serif;
+      text-align: right;
+      background: linear-gradient(135deg, #ece9e6, var(--primary-bg));
+      margin: 0;
+      padding: 0;
+      color: var(--primary-text);
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 50px auto;
+      background: var(--container-bg);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    h2 {
+      text-align: center;
+      font-size: 26px;
+      color: var(--primary-text);
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
 
-body {
-    font-family: 'Tajawal', Arial, sans-serif;
-    text-align: right;
-    background: linear-gradient(135deg, #ece9e6, #ffffff);
-    margin: 0;
-    padding: 0;
-}
+    /* استایل ورودی‌ها */
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid var(--input-border);
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+      transition: 0.3s ease;
+      background: var(--input-bg);
+      color: var(--primary-text);
+    }
+    input[type="text"]:focus, input[type="number"]:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+      background: var(--primary-bg);
+    }
+    input::placeholder {
+      color: #888;
+      font-style: italic;
+    }
 
-.container {
-    width: 90%;
-    max-width: 600px;
-    margin: 50px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
+    /* استایل دکمه‌ها */
+    button {
+      background: var(--button-bg);
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.3s;
+      font-weight: bold;
+    }
+    button:hover {
+      background: var(--button-hover-bg);
+    }
 
-h2 {
-    text-align: center;
-    font-size: 26px;
-    color: #333;
-    margin-bottom: 20px;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
+    /* استایل دکمه حذف */
+    .delete-btn {
+      background: linear-gradient(135deg, #dc3545, #b21f2d);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+      font-weight: bold;
+    }
+    .delete-btn:hover {
+      background: linear-gradient(135deg, #b21f2d, #8b1522);
+    }
 
-/* استایل ورودی‌ها */
-input[type="text"], input[type="number"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    box-sizing: border-box;
-    margin-bottom: 12px;
-    transition: 0.3s ease;
-    background: #f8f8f8;
-}
+    /* استایل نمایش لیست کسب‌وکار */
+    .business {
+      border: 1px solid #ddd;
+      padding: 18px;
+      margin-top: 12px;
+      background: var(--container-bg);
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .business:hover {
+      transform: scale(1.03);
+    }
 
-input[type="text"]:focus, input[type="number"]:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    background: white;
-}
+    /* استایل متن تراکنش‌ها */
+    .log {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: bold;
+      border-left: 4px solid #007bff;
+    }
 
-input::placeholder {
-    color: #888;
-    font-style: italic;
-}
-
-/* استایل دکمه‌ها */
-button {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    padding: 14px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    transition: 0.3s;
-    font-weight: bold;
-}
-
-button:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
-}
-
-/* استایل دکمه حذف */
-.delete-btn {
-    background: linear-gradient(135deg, #dc3545, #b21f2d);
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s;
-    font-weight: bold;
-}
-
-.delete-btn:hover {
-    background: linear-gradient(135deg, #b21f2d, #8b1522);
-}
-
-/* استایل نمایش لیست کسب‌وکار */
-.business {
-    border: 1px solid #ddd;
-    padding: 18px;
-    margin-top: 12px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.business:hover {
-    transform: scale(1.03);
-}
-
-/* استایل متن تراکنش‌ها */
-.log {
-    background: #f9f9f9;
-    padding: 10px;
-    margin-top: 6px;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: bold;
-    border-left: 4px solid #007bff;
-}
-
-/* استایل ورودی‌ها */
-input[type="text"], input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* حالت focus */
-input[type="text"]:focus, input[type="number"]:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* استایل متن placeholder */
-input::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-/* استایل دکمه‌ها */
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* استایل برای شماره‌گذاری */
-.input-number {
-    text-align: left;
-}
-
-/* استایل دکمه حذف */
-.delete-btn {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-.delete-btn:hover {
-    background: #c82333;
-}
-
-/* استایل برای نمایش لیست کسب‌وکار */
-.business {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-top: 10px;
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* استایل برای متن تراکنش‌ها */
-.log {
-    background: #f9f9f9;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-}
-*/
+    /* استایل‌های مربوط به تقویم */
     #calendarContainer {
-      width: 300px;
-      margin: 20px auto;
+      width: 90%;
+      margin: 50px auto;
       text-align: center;
     }
     #monthYear {
@@ -236,7 +159,6 @@ button:hover {
     #calendar th {
       background: #f2f2f2;
     }
-    /* استایل روزهای علامت‌گذاری شده */
     .marked {
       background: #4CAF50;
       cursor: pointer;
@@ -245,7 +167,6 @@ button:hover {
       background: #F44336;
       cursor: pointer;
     }
-    /* استایل روز امروز */
     .today {
       border: 2px solid red;
     }
@@ -266,7 +187,7 @@ button:hover {
       top: 50%;
       left:50%;
       transform: translate(-50%, -50%);
-      background: white;
+      background: var(--container-bg);
       padding: 20px;
       z-index: 101;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -274,7 +195,6 @@ button:hover {
     #modal button {
       margin-top: 10px;
     }
-    /* استایل دکمه‌های ناوبری */
     .nav-buttons {
       margin: 10px 0;
     }
@@ -282,9 +202,58 @@ button:hover {
       margin: 0 5px;
       padding: 5px 10px;
     }
+
+    /* تغییرات استایل برای حالت Dark Mode */
+    body.dark-mode {
+      --primary-bg: #1a1a1a;
+      --primary-text: #f0f0f0;
+      --container-bg: #2c2c2c;
+      --input-bg: #3a3a3a;
+      --input-border: #555;
+      background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+    }
+    body.dark-mode .business,
+    body.dark-mode .container,
+    body.dark-mode #modal {
+      background: var(--container-bg);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+    body.dark-mode input[type="text"],
+    body.dark-mode input[type="number"] {
+      background: var(--input-bg);
+      border: 2px solid var(--input-border);
+      color: var(--primary-text);
+    }
+    body.dark-mode input::placeholder {
+      color: #ccc;
+    }
+    body.dark-mode .log {
+      background: #333;
+      border-left: 4px solid #007bff;
+      color: var(--primary-text);
+    }
+    body.dark-mode #calendar th,
+    body.dark-mode #calendar td {
+      border: 1px solid #555;
+    }
+    body.dark-mode #calendar th {
+      background: #444;
+    }
     </style>
 </head>
 <body>
+
+  <div class="container">
+    <h2>صفحه تست حالت Dark/Normal</h2>
+    <!-- دکمه تغییر تم -->
+    <button id="toggleMode">تغییر به حالت تیره</button>
+
+    <!-- محتوای نمونه -->
+    <p>این یک متن نمونه برای تست تغییر تم است.</p>
+  </div>
+
+
+
   <div id="calendarContainer" class="container">
     <!-- دکمه‌های ناوبری برای تغییر ماه و سال -->
     <div class="nav-buttons">
@@ -329,6 +298,56 @@ button:hover {
 
   
     <script>
+
+
+    // تابع ذخیره کردن کوکی
+    function setCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    // تابع دریافت مقدار کوکی
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    // انتخاب دکمه تغییر تم
+    const toggleButton = document.getElementById('toggleMode');
+
+    // بررسی کوکی در بارگذاری صفحه
+    const savedTheme = getCookie("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark-mode");
+      toggleButton.textContent = 'تغییر به حالت عادی';
+    } else {
+      toggleButton.textContent = 'تغییر به حالت تیره';
+    }
+
+    // تغییر تم و ذخیره در کوکی هنگام کلیک دکمه
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      if (document.body.classList.contains('dark-mode')) {
+        toggleButton.textContent = 'تغییر به حالت عادی';
+        setCookie("theme", "dark", 7); // ذخیره برای 7 روز
+      } else {
+        toggleButton.textContent = 'تغییر به حالت تیره';
+        setCookie("theme", "light", 7);
+      }
+    });
+
+
         let dates=[];
         let dess=[];
         ////////////////////////////////////////////
