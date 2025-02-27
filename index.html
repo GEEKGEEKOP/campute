@@ -310,14 +310,15 @@ button:hover {
       </tbody>
     </table>
   </div>
-    <div class="container">
+    <div class="container" id="add-businesses">
         <h2>مدیریت کسب‌وکارها</h2>
         <input type="text" id="businessName" placeholder="نام کسب‌وکار">
         <input type="text" id="initialCash" class="input-number" placeholder="سرمایه اولیه " oninput="formatInput(this)">
         <input type="text" id="currencyunit" placeholder="واحد پول کسب و کار را وارد کنید">
         <button onclick="addBusiness()">افزودن کسب‌وکار</button>
-        <div id="businessList"></div>
     </div>
+
+        <div class="container"id="businessList"></div>
   <!-- overlay و modal برای نمایش اطلاعات -->
   <div id="modalOverlay"></div>
   <div id="modal">
@@ -335,7 +336,22 @@ button:hover {
         console.log(businesses);
         const parseDate = (dateString) => {
             return new Date(dateString);
-        };        
+        };       
+
+
+    if (businesses.length > 0) {
+      // انتخاب div مورد نظر با شناسه "targetDiv"
+      const targetDiv = document.getElementById("add-businesses");
+      // اگر div پیدا شد، آن را از صفحه حذف کن
+      if (targetDiv) {
+        targetDiv.remove();
+      }
+    }
+
+
+
+
+
         ///////////////////////////*************************************************************///////////////////////
         function saveData() {
             localStorage.setItem('businesses', JSON.stringify(businesses));
