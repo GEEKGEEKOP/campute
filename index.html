@@ -13,6 +13,84 @@
     <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.9.2/build/moment-jalaali.js"></script>
     <title>نرم‌افزار حسابداری</title>
     <style>
+
+
+
+
+
+
+
+:root {
+    --background: #f2eee3;
+    --check: #000;
+    --ball: #f2eee3;
+}
+
+.dark {
+    --background: #000;
+    --check: #f2eee3;
+    --ball: #000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.dark-mode {
+    display: grid;
+    width: 100%;
+    justify-items: center;
+    align-items: center;
+    background: var(--background);
+    transition: .5s;
+}
+
+.checkbox:checked+.label .ball {
+    transform: translateX(24px);
+}
+
+.checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+.label {
+    width: 50px;
+    height: 26px;
+    background: var(--check);
+    border-radius: 50px;
+    padding: 5px;
+    position: relative;
+}
+
+.ball {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background: var(--ball);
+    border-radius: 50%;
+    transition: transform 0.2s linear;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /* تعریف متغیرهای اصلی برای تم روشن */
     :root {
       direction: rtl;
@@ -30,6 +108,7 @@
 
     /* استایل‌های کلی صفحه */
     body {
+      display: grid;
       font-family: 'Tajawal', Arial, sans-serif;
       text-align: right;
       background: linear-gradient(135deg, #ece9e6, var(--primary-bg));
@@ -243,16 +322,22 @@
 </head>
 <body>
 
-  <div class="container">
+
+    <div class="dark-mode container">
+        <input type="checkbox" class='checkbox' id='checkbox' placeholder='checkbox'>
+        <label for="checkbox" class='label'>
+            <div class="ball"> </div>
+        </label>
+    </div>
+
+<!--
+   <div class="container">
     <h2>صفحه تست حالت Dark/Normal</h2>
-    <!-- دکمه تغییر تم -->
     <button id="toggleMode">تغییر به حالت تیره</button>
 
-    <!-- محتوای نمونه -->
     <p>این یک متن نمونه برای تست تغییر تم است.</p>
   </div>
-
-
+  -->
 
   <div id="calendarContainer" class="container">
     <!-- دکمه‌های ناوبری برای تغییر ماه و سال -->
@@ -324,25 +409,33 @@
     }
 
     // انتخاب دکمه تغییر تم
-    const toggleButton = document.getElementById('toggleMode');
+    const toggleButton = document.getElementById('checkbox');
 
     // بررسی کوکی در بارگذاری صفحه
     const savedTheme = getCookie("theme");
     if (savedTheme === "dark") {
       document.body.classList.add("dark-mode");
-      toggleButton.textContent = 'تغییر به حالت عادی';
+      toggleButton.addEventListener('change', function() {
+    html.classList.toggle('dark')
+})
     } else {
-      toggleButton.textContent = 'تغییر به حالت تیره';
+      toggleButton.addEventListener('change', function() {
+    html.classList.toggle('dark')
+})
     }
 
     // تغییر تم و ذخیره در کوکی هنگام کلیک دکمه
     toggleButton.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       if (document.body.classList.contains('dark-mode')) {
-        toggleButton.textContent = 'تغییر به حالت عادی';
+        toggleButton.textContent = addEventListener('change', function() {
+    html.classList.toggle('dark')
+})
         setCookie("theme", "dark", 7); // ذخیره برای 7 روز
       } else {
-        toggleButton.textContent = 'تغییر به حالت تیره';
+        toggleButton.textContent = addEventListener('change', function() {
+    html.classList.toggle('dark')
+})
         setCookie("theme", "light", 7);
       }
     });
