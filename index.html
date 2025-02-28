@@ -494,6 +494,7 @@
                 document.getElementById('businessName').value = '';
                 document.getElementById('initialCash').value = '';
             }
+            location.reload();
         }
         function convertJalaliToGregorian(jalaliDate) {
             return moment(jalaliDate, 'jYYYY/jM/jD').format('YYYY-MM-DD');
@@ -539,6 +540,7 @@
                 saveData();
                 renderBusinesses();
             }
+            location.reload();
         }
         function formatNumber(number) {
             // ابتدا اطمینان حاصل می‌کنیم که ورودی یک عدد است
