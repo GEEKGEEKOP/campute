@@ -119,10 +119,10 @@
     .container {
       width: 90%;
       max-width: 600px;
-      margin: 50px auto;
+      margin: 0px auto;
       background: var(--container-bg);
       padding: 25px;
-      border-radius: 12px;
+      border-radius: 50px;
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     }
     h2 {
@@ -569,6 +569,19 @@
             return prefix + integerPart + decimalPart;
         }
         function renderBusinesses() {
+
+
+            if (businesses.length == 0) {
+              // انتخاب div مورد نظر با شناسه "targetDiv"
+              const targetDiv = document.getElementById("businessList");
+              // اگر div پیدا شد، آن را از صفحه حذف کن
+              if (targetDiv) {
+                targetDiv.remove();
+              }
+              return 0;
+            }
+
+
             const list = document.getElementById('businessList');
             list.innerHTML = '';
             //let array1=[];
