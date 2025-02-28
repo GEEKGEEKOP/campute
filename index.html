@@ -490,7 +490,7 @@
             if (name && !isNaN(cash)) {
                 businesses.push({ name, cash, currencyunit,transactions: [] });
                 saveData();
-                renderBusinesses();
+                //renderBusinesses();
                 document.getElementById('businessName').value = '';
                 document.getElementById('initialCash').value = '';
             }
@@ -538,7 +538,7 @@
             if (confirm("آیا مطمئن هستید که می‌خواهید این کسب‌وکار را حذف کنید؟")) {
                 businesses.splice(index, 1);
                 saveData();
-                renderBusinesses();
+                //renderBusinesses();
             }
             location.reload();
         }
